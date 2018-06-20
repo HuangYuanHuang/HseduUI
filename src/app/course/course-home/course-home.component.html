@@ -1,0 +1,109 @@
+<div class="container-fluid">
+  <div class="card">
+    <div class="card-header">
+      {{courseName}}
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-4">
+          <div>
+            <app-course-video-master></app-course-video-master>
+          </div>
+
+          <div>
+            <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+              <li class="nav-item">
+                <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+                  aria-selected="true">{{ 'Chat' | translate}}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+                  aria-selected="false">{{ 'Course handouts' | translate}}</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
+                  aria-selected="false">{{ 'Online list' | translate}}&nbsp;
+                  <span id="onlineNum" class="badge badge-primary">1</span>
+                </a>
+              </li>
+            </ul>
+            <div class="tab-content" id="pills-tabContent">
+              <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                <div class="tab-context">
+                  <app-course-chat></app-course-chat>
+                </div>
+
+              </div>
+              <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+                <div class="tab-context">
+                  <app-course-file></app-course-file>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+                <app-course-online></app-course-online>
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="col-8">
+          <div class="video-person">
+            <app-course-video></app-course-video>
+          </div>
+          <div class="shard">
+            <nav>
+              <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-board-tab" data-toggle="tab" href="#nav-board" role="tab" aria-controls="nav-home"
+                  aria-selected="true">{{ 'Board' | translate}}</a>
+                <a class="nav-item nav-link" id="nav-power-tab" data-toggle="tab" href="#nav-power" role="tab" aria-controls="nav-power"
+                  aria-selected="false">{{ 'PowerPoint' | translate}}</a>
+                <a class="nav-item nav-link" id="nav-vote-tab" data-toggle="tab" href="#nav-vote" role="tab" aria-controls="nav-profile"
+                  aria-selected="false">{{ 'Vote' | translate}}</a>
+
+              </div>
+            </nav>
+            <div class="tab-content" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="nav-board" role="tabpanel" aria-labelledby="nav-board-tab">
+                <div class="awwboard">
+                  <app-course-board></app-course-board>
+                </div>
+              </div>
+              <div class="tab-pane fade " id="nav-power" role="tabpanel" aria-labelledby="nav-power-tab">
+                <div>
+                  <app-course-point></app-course-point>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="nav-vote" role="tabpanel" aria-labelledby="nav-vote-tab">
+                <div>
+                  <app-course-vote></app-course-vote>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+    <div class="card-footer text-muted">
+
+      <div style="text-align: center" class="div-button" *ngIf="localVideoNode">
+
+        <button type="button" class="btn btn-sm " (click)="localVideoNode.playVideo()" [ngClass]="localVideoNode.videoBtnClass">
+          <i class="fas fa-1x " [ngClass]="localVideoNode.videoIonClass"></i>
+        </button>
+        <button type="button" class="btn btn-sm " (click)="localVideoNode.playAudio()" [ngClass]="localVideoNode.audioBtnClass">
+          <i class="fas fa-1x " [ngClass]="localVideoNode.audioIonClass"></i>
+        </button>
+        <button type="button" class="btn btn-sm btn-danger" (click)="streamClose()">
+          <i class="fas fa-ban"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+</div>

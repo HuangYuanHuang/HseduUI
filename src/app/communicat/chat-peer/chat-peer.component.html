@@ -1,0 +1,69 @@
+<div class="main" id="chat-main">
+  <div class="m-header">
+    <div style="float: left;">
+        <h5>hyhrobot</h5>
+    </div>
+    
+    <div class="opera-btn" >
+      <div>
+        <button type="button" class="btn btn-light btn-sm" (click)="linkInfo('audio')">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button type="button" class="btn btn-light btn-sm" (click)="linkInfo('video')">
+          <i class="fas fa-video"></i>
+        </button>
+      </div>
+  
+  
+    </div>
+  </div>
+  <div class="m-message" id="m-message">
+
+    <ul>
+      <!--v-for-start-->
+      <li>
+        <p class="time">
+          <span>20:48</span>
+        </p>
+        <div class="main">
+          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
+          <div class="text">agdga</div>
+        </div>
+      </li>
+      <li>
+        <p class="time">
+          <span>20:48</span>
+        </p>
+        <div class="main self">
+          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
+          <div class="text">agdga</div>
+        </div>
+      </li>
+      <li>
+        <p class="time">
+          <span>20:48</span>
+        </p>
+        <div class="main self">
+          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
+          <div class="text">agdga</div>
+        </div>
+      </li>
+      <li>
+        <p class="time">
+          <span>20:48</span>
+        </p>
+        <div class="main self">
+          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
+          <div class="text">agdga</div>
+        </div>
+      </li>
+      <!--v-for-end-->
+    </ul>
+  </div>
+  <!--v-component-->
+
+  <div class="m-text">
+    <textarea name="messageContext" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}"></textarea>
+  </div>
+  <!--v-component-->
+</div>

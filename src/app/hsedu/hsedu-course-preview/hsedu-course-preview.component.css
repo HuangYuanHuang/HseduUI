@@ -1,0 +1,6 @@
+.card{
+    float: left;
+    width: 20%;
+    margin-left: 5px;
+    cursor: pointer;
+}

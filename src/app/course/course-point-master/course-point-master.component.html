@@ -1,0 +1,117 @@
+<div>
+  <div class="jumbotron jumbotron-fluid" *ngIf="!currentPoint">
+    <div class="container">
+      <h1 class="display-4">{{'Course handouts' |translate}}</h1>
+      <p class="lead">{{'There is no courseware sharing'|translate}}</p>
+    </div>
+  </div>
+
+  <div *ngIf="currentPoint">
+    <div class="row">
+      <div class="col-md-3 cartimage">
+        <div *ngFor="let item of pointNodes;let i=index" style="margin-top: 5px;" (click)="selectPoint(item,i)">
+          <div class="card-index">
+            <span *ngIf="item.isPlay" class="badge badge-primary">{{item.index}}</span>
+            <span *ngIf="!item.isPlay" class="badge badge-secondary">{{item.index}}</span>
+          </div>
+          <div class="card">
+            <img class="card-img-top" [src]="item.path" alt="Card image cap">
+
+          </div>
+        </div>
+
+
+      </div>
+      <div class="col-md-9 main-card">
+        <div class="card">
+          <img class="card-img-top" id="crad-main-image" [src]="currentPoint.model.path" alt="Card image cap">
+
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="float: left;width: 25%">
+        <div style="text-align: center">
+          <span class="badge badge-primary">{{currentPoint.index+1}}</span>&nbsp;/&nbsp;
+          <span class="badge badge-info">{{pointNodes.length}}</span>
+
+        </div>
+      </div>
+      <div style="text-align: center">
+        <button style="text-align: right" type="button" class="btn btn-sm btn-primary" (click)="openWindow(contentPoint,0)">
+          <i class="fas  fa-step-forward"></i>
+        </button>
+        <button style="text-align: right" type="button" class="btn btn-sm btn-primary" (click)="openWindow(contentPoint,currentPoint.index)">
+          <i class="fas  fa-play"></i>
+        </button>
+      </div>
+    </div>
+
+
+  </div>
+</div>
+
+
+
+
+<ng-template #contentPoint let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{title}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+      <div class="col-md-8 border-primary">
+        <div class="card">
+          <img class="card-img-top" [src]="currentPoint.model.path" alt="Card image cap">
+
+        </div>
+        <div style="text-align: center">
+
+          <div class="row" style="margin-top: 10px">
+            <div class="col-md-4" style="text-align: right">
+              <button type="button" class="btn btn-primary" (click)="changePage(-1)">
+                <i class="fas fa-chevron-left"></i>
+              </button>
+            </div>
+            <div class="col-md-4">
+              <div>
+                <span class="badge badge-primary">{{currentPoint.index+1}}</span>&nbsp;/&nbsp;
+                <span class="badge badge-info">{{pointNodes.length}}</span>
+              </div>
+              <p>
+                <ngb-progressbar type="primary" [value]="currentPoint.index+1" [max]="pointNodes.length"></ngb-progressbar>
+              </p>
+            </div>
+            <div class="col-md-4" style="text-align: left">
+              <button type="button" class="btn btn-primary" (click)="changePage(1)">
+                <i class="fas fa-chevron-right"></i>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div *ngIf="currentPoint.index<pointNodes.length-1">
+          <h5>{{'The next slide' |translate}}</h5>
+          <div class="card">
+            <img class="card-img-top" [src]="nextPoint.model.path" alt="Card image cap">
+
+          </div>
+        </div>
+        <div *ngIf="currentPoint.index==pointNodes.length-1">
+          <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+              <h1 class="display-4" style="text-align: center">{{'Courseware End'|translate}}</h1>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">{{ 'Close' | translate}}</button>
+  </div>
+</ng-template>

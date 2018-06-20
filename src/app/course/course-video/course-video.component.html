@@ -1,0 +1,24 @@
+<div class="video-person">
+  <div class="card border-primary mb-3">
+    <div class="card-body text-primary text-center" style="padding:0.25rem">
+
+      <div id="video-person-card">
+        <h3 style="padding-top: 100px" *ngIf="!videoNodes">没有学生在课堂</h3>
+
+        <div class="video-play" *ngFor="let item of videoNodes" id="{{item.getStreamId()}}" >
+          <!-- <div class="mouse-video" >
+            <ul>
+              <ol class="mouse-video-person" ng-click="item.playAudio()">
+
+              </ol>
+              <ol class="mouse-video-person" ng-click="item.playVideo()">
+
+              </ol>
+            </ul>
+
+          </div> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

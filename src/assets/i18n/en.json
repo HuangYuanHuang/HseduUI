@@ -1,0 +1,6 @@
+{
+    "chat":"chat",
+    "Input messages here, press Enter to send.":"Input messages here, press 'Enter' to send",
+    "Audio invitations":"Audio invitations from {{Name}}",
+    "Video invitations":"Video invitations from {{Name}}"
+}

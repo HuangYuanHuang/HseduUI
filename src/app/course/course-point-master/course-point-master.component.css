@@ -1,0 +1,27 @@
+.cartimage {
+  height: 500px;
+  overflow-y: auto;
+  margin-bottom: 5px;
+}
+
+.card-index {
+  float: left;
+  width: 30px;
+  text-align: center;
+}
+
+#crad-main-image {
+  max-height: 500px;
+}
+
+.modal-poit-dialog {
+  position: relative;
+  width: auto;
+  margin: 0.5rem;
+  pointer-events: none;
+}
+
+/* .main-card {
+  height: 500px;
+  margin-bottom: 5px;
+} */

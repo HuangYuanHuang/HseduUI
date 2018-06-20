@@ -1,0 +1,70 @@
+<div class="container">
+  <div class="main">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img src="https://unescoedu.hyhrobot.com/media/profile-images/d91bd480131fe973985f1e1d2925191c_50.jpg?v=1524816692" width="30"
+          height="30" alt="">
+      </a>
+      <form class="form-inline">
+        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+        <button class="btn btn-outline-success my-2 my-sm-0"  (click)="open(content)"><i class="fas fa-plus"></i></button>
+
+      </form>
+
+      <ul class="nav nav-pills bg-light" id="pills-tab" role="tablist" style="margin-left: 300px">
+        <li class="nav-item">
+          <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+            aria-selected="true">{{'Chat' |translate}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+            aria-selected="false">{{'Contacts' |translate}}</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
+            aria-selected="false">{{'Notice' |translate}}</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="body">
+      <div class="tab-content" id="pills-tabContent">
+        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+          <div class="chat-list">
+            <app-chat-list></app-chat-list>
+          </div>
+          <div class="chat-peer">
+            <app-chat-peer></app-chat-peer>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+          <div class="chat-list">
+            <app-contact-list></app-contact-list>
+          </div>
+          <div class="chat-peer">
+            <app-contact-info></app-contact-info>
+          </div>
+        </div>
+        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+    <div class="modal-header">
+      <h4 class="modal-title">{{'Find friends' | translate}}</h4>
+      <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+        <router-outlet></router-outlet>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-default" (click)="d('Cross click')">{{'Close'| translate}}</button>
+  
+    </div>
+  </ng-template>
+  

@@ -1,0 +1,10 @@
+<div class="jumbotron jumbotron-fluid" *ngIf="!currentPath">
+  <div class="container">
+    <h1 class="display-4">{{'Course handouts' |translate}}</h1>
+    <p class="lead">{{'There is no courseware sharing'|translate}}</p>
+  </div>
+</div>
+<div class="card" *ngIf="currentPath">
+  <img class="card-img-top" [src]="currentPath" alt="Card image cap" style="max-height: 500px">
+
+</div>

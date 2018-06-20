@@ -1,0 +1,45 @@
+.video-person {
+  height: 250px;
+  margin-bottom: 5px;
+}
+
+#video-person-card {
+  height: 240px !important;
+  text-align: center;
+}
+
+.video-play {
+  margin: 5px;
+  height: 100px;
+  width: 150px;
+  display: inline-block;
+  border-radius: 5px;
+}
+
+.mouse-video {
+
+  text-align: center;
+  overflow: hidden;
+  vertical-align: middle;
+  border-radius: 5px;
+}
+
+.mouse-video span:hover {
+  transform: scale(1.5);
+}
+
+.mouse-video span:hover i {
+  opacity: 0.8;
+}
+
+.mouse-video ul {
+  margin-left: 0px;
+  border-radius: 5px;
+}
+
+.mouse-video ul ol {
+  height: 58px;
+  line-height: 58px;
+  width: 100%;
+  margin: 0;
+}

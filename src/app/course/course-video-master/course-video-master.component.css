@@ -1,0 +1,9 @@
+.video-master{
+    height: 250px;
+    margin-bottom: 5px;
+   
+}
+.card-body{
+    padding: 0.25rem !important;
+    background: black;
+}

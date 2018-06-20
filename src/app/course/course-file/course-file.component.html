@@ -1,0 +1,61 @@
+<div>
+  <div class="file-list">
+    <div *ngFor="let item of fileNodes;let i=index">
+      <hr style="margin-top: 0px;margin-bottom: 0px"/>
+      <table class="table  table-borderless table-sm">
+
+        <tbody>
+          <tr [ngClass]="item.trClass">
+            <th scope="row">{{i+1}}</th>
+            <td >{{item.fileName}}</td>
+            <td style="text-align: left;width: 80px">
+              <button type="button" class="btn btn-sm btn-outline-success" (click)="item.fileDownload()">
+                <i class="fa fa-download fa-1x"></i>
+              </button>
+              <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="item.canConvert" (click)="item.fileConvert()">
+                <i class="far fa-play-circle"></i>
+              </button>
+            </td>
+
+
+          </tr>
+          <tr style="height: 13px;margin-bottom: 0px" *ngIf="item.showProgress" [ngClass]="item.trClass">
+            <td colspan="3" style="padding: 0px">
+              <p style="margin-bottom: 0px">
+                <ngb-progressbar type="info" [value]="item.progressValue" [max]="4" height="10px"></ngb-progressbar>
+              </p>
+            </td>
+
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+
+
+  </div>
+  <div style="text-align: center" *ngIf="isTeacher">
+    <button class="btn btn-outline-primary mb-2 mr-2" (click)="openWindow(content)">{{ 'Upload Files' | translate}}</button>
+  </div>
+</div>
+
+
+
+<ng-template #content let-c="close" let-d="dismiss" style="width:900px">
+  <div class="modal-header">
+    <h4 class="modal-title">{{ 'Upload Files' | translate}}</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <div class="embed-responsive embed-responsive-16by9">
+      <iframe class="embed-responsive-item" [src]="uploadUrl" allowfullscreen></iframe>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-light" (click)="c('Close click')">{{ 'Close' | translate}}</button>
+  </div>
+</ng-template>

@@ -1,0 +1,10 @@
+.badge {
+    width: 70px;
+  }
+  
+  .vote-list {
+    height: 510px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+  

@@ -1,0 +1,19 @@
+<div class="course-chat">
+  <p>
+    <span>
+      <strong>{{'System Message' |translate }}：</strong>
+    </span> {{'Wecome to chat room'| translate}}</p>
+  <p *ngFor="let item of messageNodes">
+    <span>
+      <strong>{{item.userName}}：</strong>
+    </span>
+    {{item.message}}
+  </p>
+</div>
+<div>
+  <form>
+    <div class="form-group">
+      <textarea name="message" class="form-control" [(ngModel)]="messageContext" (keyup.enter)="sendMessage()" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}" rows="2"></textarea>
+    </div>
+  </form>
+</div>
