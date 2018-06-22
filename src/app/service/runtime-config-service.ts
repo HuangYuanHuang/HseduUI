@@ -15,7 +15,7 @@ export class RuntimeConfigService {
         this.language = params.get('language') || 'en';
         this.userName = params.get('userName') || 'UserName';
         this.courseName = decodeURIComponent(params.get('courseName') || 'Live Lecture');
-        this.userId = parseInt(params.get('userId') || '0', 0);
+        this.userId = parseInt(params.get('userId') || '7', 0);
         this.toString();
         if (this.language.indexOf('zh') !== -1) {
             this.translateService.use('zh');

@@ -14,30 +14,17 @@
       <table class="table table-hover">
 
         <tbody>
-          <tr>
-            <th scope="row">
-              <img src="https://unescoedu.hyhrobot.com/media/profile-images/d91bd480131fe973985f1e1d2925191c_50.jpg?v=1524816692" alt="">
-            </th>
-            <td>
-              <div>
-                <h5>
-                  <strong>userName</strong>
-                </h5>
-                <p>欢迎感兴趣的朋友们一起来玩哦</p>
-              </div>
-            </td>
 
-          </tr>
-          <tr>
+          <tr *ngFor="let item of userNodes" (click)="setUser(item)" [ngClass]="item.active">
             <th scope="row">
-              <img src="https://unescoedu.hyhrobot.com/media/profile-images/765b7ad06e48abd94e4215aaba9d60e8_50.jpg?v=1524817034" alt="">
+              <img [src]="item.imageUrlMedium" alt="">
             </th>
             <td>
               <div>
                 <h5>
-                  <strong>hyhrobot</strong>
+                  <strong>{{item.userName}}</strong>
                 </h5>
-                <p>欢迎起来玩哦</p>
+                <p>{{item.bio}}</p>
               </div>
             </td>
 
@@ -46,26 +33,7 @@
       </table>
     </div>
     <div class="tab-pane fade" id="online" role="tabpanel" aria-labelledby="online-tab">
-        <table class="table table-hover">
 
-            <tbody>
-             
-              <tr>
-                <th scope="row">
-                  <img src="https://unescoedu.hyhrobot.com/media/profile-images/765b7ad06e48abd94e4215aaba9d60e8_50.jpg?v=1524817034" alt="">
-                </th>
-                <td>
-                  <div>
-                    <h5>
-                      <strong>hyhrobot</strong>
-                    </h5>
-                    <p>欢迎起来玩哦</p>
-                  </div>
-                </td>
-    
-              </tr>
-            </tbody>
-          </table>
     </div>
 
   </div>

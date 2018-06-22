@@ -13,15 +13,15 @@
 
       <ul class="nav nav-pills bg-light" id="pills-tab" role="tablist" style="margin-left: 300px">
         <li class="nav-item">
-          <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
+          <a class="nav-link active"  id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home"
             aria-selected="true">{{'Chat' |translate}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
+          <a class="nav-link " id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile"
             aria-selected="false">{{'Contacts' |translate}}</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
+          <a class="nav-link "  id="pills-contact-tab" data-toggle="pill" href="#pills-contact" role="tab" aria-controls="pills-contact"
             aria-selected="false">{{'Notice' |translate}}</a>
         </li>
       </ul>
@@ -29,23 +29,25 @@
 
     <div class="body">
       <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+        <div class="tab-pane fade show active"  id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
           <div class="chat-list">
-            <app-chat-list></app-chat-list>
+            <app-chat-list [userInfo]="chatInfo" [currentMessage]="currentMessage" (openChatEvent)="chatUserEvent($event)" (removeChatEvent)="removeChatEvent($event)"></app-chat-list>
           </div>
           <div class="chat-peer">
-            <app-chat-peer></app-chat-peer>
+            <app-chat-peer [userInfo]="chatInfo" (currentMessageEvent)="currentMessageEvent($event)"></app-chat-peer>
           </div>
         </div>
-        <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
+        <div class="tab-pane fade "  id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
           <div class="chat-list">
-            <app-contact-list></app-contact-list>
+            <app-contact-list (userInfoEvent)="userInfo($event)"></app-contact-list>
           </div>
           <div class="chat-peer">
-            <app-contact-info></app-contact-info>
+            <app-contact-info  [userInfo]="currentInfo" (chatUserEvent)="chatUserEvent($event)"></app-contact-info>
           </div>
         </div>
-        <div class="tab-pane fade" id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">...</div>
+        <div class="tab-pane fade " id="pills-contact" role="tabpanel" aria-labelledby="pills-contact-tab">
+          <app-system-notice></app-system-notice>
+        </div>
       </div>
     </div>
   </div>

@@ -1,7 +1,7 @@
 <div class="main" id="chat-main">
   <div class="m-header">
     <div style="float: left;">
-        <h5>hyhrobot</h5>
+        <h5 *ngIf="currentChatModel.user">{{currentChatModel.user.userName}}</h5>
     </div>
     
     <div class="opera-btn" >
@@ -19,42 +19,15 @@
   </div>
   <div class="m-message" id="m-message">
 
-    <ul>
+    <ul *ngIf="currentChatModel.nodes">
       <!--v-for-start-->
-      <li>
+      <li *ngFor="let item of currentChatModel.nodes">
         <p class="time">
-          <span>20:48</span>
+          <span>{{item.creationTime | date: 'HH:mm:ss'}}</span>
         </p>
-        <div class="main">
+        <div class="main " [ngClass]="item.getSelfActive(runConfig)">
           <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
-          <div class="text">agdga</div>
-        </div>
-      </li>
-      <li>
-        <p class="time">
-          <span>20:48</span>
-        </p>
-        <div class="main self">
-          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
-          <div class="text">agdga</div>
-        </div>
-      </li>
-      <li>
-        <p class="time">
-          <span>20:48</span>
-        </p>
-        <div class="main self">
-          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
-          <div class="text">agdga</div>
-        </div>
-      </li>
-      <li>
-        <p class="time">
-          <span>20:48</span>
-        </p>
-        <div class="main self">
-          <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
-          <div class="text">agdga</div>
+          <div class="text">{{item.text}}</div>
         </div>
       </li>
       <!--v-for-end-->
@@ -63,7 +36,7 @@
   <!--v-component-->
 
   <div class="m-text">
-    <textarea name="messageContext" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}"></textarea>
+    <textarea name="messageContext" [(ngModel)]="currentChatModel.text" (keyup.enter)="sendMessage()" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}"></textarea>
   </div>
   <!--v-component-->
 </div>

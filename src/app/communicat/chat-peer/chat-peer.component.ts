@@ -1,15 +1,153 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { RuntimeConfigService } from '../../service/runtime-config-service';
+import { SignalrOnlineChatService, OnlineMessageNode, MessageTypeEnum } from '../../service/signalr-online-chat-service';
+import { HttpClient } from '@angular/common/http';
+import { CourseConfig } from '../../../shard/CourseConfig';
 
 @Component({
   selector: 'app-chat-peer',
   templateUrl: './chat-peer.component.html',
   styleUrls: ['./chat-peer.component.less']
 })
-export class ChatPeerComponent implements OnInit {
+export class ChatPeerComponent implements OnInit, OnChanges {
+  private readonly createPath = '/api/services/app/UserMessageService/Create';
+  @Input() userInfo;
+  @Output() currentMessageEvent = new EventEmitter<any>();
+  isFirstLoad = false;
+  userMessageMap = new Map<number, MessageModel>();
+  currentChatModel = { user: null, nodes: [], text: '' };
+  constructor(private runConfig: RuntimeConfigService,
+    private onlineChatService: SignalrOnlineChatService,
+    private http: HttpClient) {
 
-  constructor() { }
-
-  ngOnInit() {
+  }
+  ngOnChanges(changes: SimpleChanges) {
+    if (!this.isFirstLoad) {
+      return;
+    }
+    const current = changes['userInfo'].currentValue;
+    console.log(current);
+    if (current && current === '[remove]') {
+      this.userMessageMap.delete(current.data.userId);
+    } else if (current) {
+      this.currentChatModel.user = current;
+      if (!this.userMessageMap.has(current.userId)) {
+        this.userMessageMap.set(current.userId, new MessageModel(null, false, []));
+      }
+      console.log(this.userMessageMap.get(current.userId));
+      this.loadMessage(current, this.userMessageMap.get(current.userId));
+    } else {
+      this.currentChatModel = { user: null, nodes: [], text: '' };
+    }
   }
 
+  loadMessage(item: any, model: MessageModel) {
+    if (model.isLoad) {
+      this.currentChatModel.nodes = model.nodes;
+      return;
+    }
+    const getPath = '/api/services/app/UserMessageService/GetMessages';
+    let url = `${CourseConfig.CourseRootUrl}${getPath}?CourseId=Peer-Peer`;
+    url += `&UserId=${this.runConfig.userId}&ToUserId=${item.userId}`;
+    this.http.get<any>(url).subscribe(d => {
+      if (d.success) {
+        this.currentChatModel.nodes = [];
+        d.result.items.forEach(node => {
+          this.currentChatModel.nodes.push(new ChatNode(node.message, node.fromUserId,
+            node.toUserId, node.messageType, node.creationTime));
+        });
+        if (this.currentChatModel.nodes.length > 0) {
+          model.lastChatNode = this.currentChatModel.nodes[this.currentChatModel.nodes.length - 1];
+          this.currentMessageEvent.emit(model.lastChatNode);
+          model.isLoad = true;
+          model.nodes = this.currentChatModel.nodes;
+        }
+
+        setTimeout(() => {
+          $('#m-message').scrollTop(50000);
+        }, 3000);
+      }
+    });
+  }
+  sendMessage() {
+    if (this.currentChatModel.text.trim().length > 0) {
+      this.postMesssage(this.currentChatModel.text.trim(), null);
+      this.currentChatModel.text = '';
+      setTimeout(() => {
+        $('#m-message').scrollTop(50000);
+      }, 100);
+    }
+  }
+  postMesssage(message: string, callBack) {
+    const chat = new ChatNode(message, this.runConfig.userId, this.currentChatModel.user.userId, MessageTypeEnum.Text, new Date());
+    this.currentChatModel.nodes.push(chat);
+    this.userMessageMap.get(this.currentChatModel.user.userId).nodes.push(chat);
+    this.currentMessageEvent.emit(chat);
+    this.http.post<any>(`${CourseConfig.CourseRootUrl}${this.createPath}`, {
+      fromUserId: this.runConfig.userId,
+      toUserId: this.currentChatModel.user.userId,
+      message: message,
+      courseId: 'Peer-Peer',
+      messageType: MessageTypeEnum.Text
+    }).subscribe(d => {
+      if (d.success) {
+        if (callBack) {
+          callBack();
+        }
+      }
+    });
+  }
+  ngOnInit() {
+    this.initGetChatMessage();
+    this.isFirstLoad = true;
+  }
+  initGetChatMessage() {
+    this.onlineChatService.obMessageNodes.subscribe(node => {
+      const model = node as OnlineMessageNode;
+
+      switch (model.messageType) {
+        case MessageTypeEnum.Audio:
+          break;
+        case MessageTypeEnum.Video:
+          break;
+        case MessageTypeEnum.Text:
+          const chat = new ChatNode(model.message, model.fromUserId, model.toUserId,
+            model.messageType, model.creationTime);
+          this.userMessageMap[node.fromUserId].lastChatNode = chat;
+          this.userMessageMap[node.fromUserId].nodes.push(chat);
+          this.currentChatModel.nodes.push(chat);
+          setTimeout(() => {
+            $('#m-message').scrollTop(50000);
+          }, 100);
+          break;
+      }
+    });
+  }
+}
+
+class MessageModel {
+  constructor(public lastChatNode: ChatNode, public isLoad: boolean,
+    public nodes: ChatNode[]) {
+
+  }
+}
+class ChatNode {
+  constructor(public text: string, public userId: number, public toUserId: number,
+    public messageType: number, public creationTime: Date) {
+
+  }
+
+  getSelfActive(runConfig: RuntimeConfigService) {
+    if (this.toUserId === runConfig.userId) {
+      return '';
+    }
+    return 'self';
+  }
+}
+
+enum ChatStautsEnum {
+  Invitation,
+  Confirm,
+  Accept,
+  Refuse
 }

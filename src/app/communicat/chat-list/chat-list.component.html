@@ -1,42 +1,27 @@
-<div>
-  <table class="table table-hover">
+<div class="chat-list">
+  <table class="table table-hover" id="table-chat-list">
 
     <tbody>
-      <tr>
+      <tr *ngFor="let item of chatNodes;let i=index" [ngClass]="item.active" (click)="chatUser(item)">
         <th scope="row">
-            <img src="https://unescoedu.hyhrobot.com/media/profile-images/d91bd480131fe973985f1e1d2925191c_50.jpg?v=1524816692" 
-            alt="">
+          <img [src]="item.userDetail.imageUrlMedium" alt="">
         </th>
         <td>
           <div>
-            <h5> <strong>userName</strong></h5>
-            <p>欢迎感兴趣的朋友们一起来玩哦</p>
+            <h5>
+              <strong>{{item.userDetail.userName}}</strong>
+            </h5>
+            <p class="text">{{item.text}}</p>
           </div>
         </td>
-        <td style="padding: 0px;vertical-align:middle">
-            <button  type="button" class="btn btn-outline-danger btn-sm">
-                <i class="far fa-times-circle fa-1x"></i>
-              </button>
+        <td style="padding: 0px;vertical-align:middle" class="opera-btn">
+          <button type="button" class="btn btn-outline-danger btn-sm" style="display: none" (click)="removeUser(item,i)">
+            <i class="far fa-times-circle fa-1x"></i>
+          </button>
         </td>
-     
+
       </tr>
-      <tr>
-        <th scope="row">
-            <img src="https://unescoedu.hyhrobot.com/media/profile-images/765b7ad06e48abd94e4215aaba9d60e8_50.jpg?v=1524817034" 
-            alt="">
-        </th>
-        <td>
-          <div>
-            <h5> <strong>hyhrobot</strong></h5>
-            <p>欢迎起来玩哦</p>
-          </div>
-        </td>
-        <td style="padding: 0px;vertical-align:middle">
-            <button  type="button" class="btn btn-outline-danger btn-sm">
-                <i class="far fa-times-circle fa-1x"></i>
-              </button>
-        </td>
-      </tr>
+
     </tbody>
   </table>
 </div>

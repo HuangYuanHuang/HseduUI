@@ -1,3 +1,102 @@
-<p>
-  system-notice works!
-</p>
+<div class="row">
+  <div class="col-3">
+    <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+      <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home"
+        aria-selected="true">
+        {{'Apply List'|translate}}
+      </a>
+      <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" role="tab" aria-controls="v-pills-profile"
+        aria-selected="false">
+        {{'Friend Requests' | translate}}
+      </a>
+
+    </div>
+  </div>
+  <div class="col-9">
+    <div class="tab-content" id="v-pills-tabContent">
+      <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+        <div>
+          <table class="table table-hover">
+
+            <tbody>
+              <tr *ngFor="let item of userApplyNodes">
+
+                <td style="width: 70px">
+                  <img *ngIf="item.userDetail" [src]="item.userDetail.imageUrlMedium" alt="">
+                </td>
+                <td>
+                  <h6 *ngIf="item.userDetail">
+                    <strong>{{item.userDetail.userName}}</strong>
+                  </h6>
+                  <p *ngIf="item.userDetail">{{item.userDetail.bio}}</p>
+                </td>
+                <td *ngIf="item.userDetail">{{item.userDetail.country}}</td>
+                <td>
+                  <p *ngIf="item.status==0">
+                    {{'Have applied' |translate}}
+                  </p>
+                  <p *ngIf="item.status==1">
+                    {{'Agree' |translate}}
+                  </p>
+                  <p *ngIf="item.status==2">
+                    {{'Refuse' |translate}}
+                  </p>
+                </td>
+                <td>
+                  {{item.time | date: 'yyyy-MM-dd HH:mm'}}
+                </td>
+              </tr>
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+        <div>
+          <table class="table table-hover">
+
+            <tbody>
+              <tr *ngFor="let item of userRequestNodes">
+
+                <td style="width: 70px">
+                  <img *ngIf="item.userDetail" [src]="item.userDetail.imageUrlMedium" alt="">
+                </td>
+                <td>
+                  <h6 *ngIf="item.userDetail">
+                    <strong>{{item.userDetail.userName}}</strong>
+                  </h6>
+                  <p *ngIf="item.userDetail">{{item.userDetail.bio}}</p>
+                </td>
+                <td *ngIf="item.userDetail">{{item.userDetail.country}}</td>
+
+                <td>
+                  {{item.time | date: 'yyyy-MM-dd HH:mm'}}
+                </td>
+                <td>
+                  <div *ngIf="item.status==0">
+                    <button class="btn btn-outline-primary my-2 my-sm-0" (click)="changeApply(item,1)">
+                        <i class="fas fa-user-check"></i>
+                    </button>
+                    <button class="btn btn-outline-danger my-2 my-sm-0" (click)="changeApply(item,2)">
+                        <i class="fas fa-user-alt-slash"></i>
+                    </button>
+                  </div>
+                  <p *ngIf="item.status==1">
+                    {{'Agree' |translate}}
+                  </p>
+                  <p *ngIf="item.status==2">
+                    {{'Refuse' |translate}}
+                  </p>
+                </td>
+              </tr>
+
+
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

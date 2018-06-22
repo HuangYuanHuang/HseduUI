@@ -13,12 +13,12 @@
 
   <div class="col-md-8">
 
-    <form>
+    <form *ngIf="currentModel" >
       <div class="form-group row">
         <div class="col-sm-8">
           <input type="text" class="form-control" placeholder="UserName" [(ngModel)]="searchName" name="searchName">
         </div>
-        <button type="submit" class="btn btn-primary col-sm-2">{{'Search'| translate}}</button>
+        <button type="submit" class="btn btn-primary col-sm-2" (click)="userSearch()">{{'Search'| translate}}</button>
       </div>
     </form>
     <div *ngIf="currentModel" class="person-list">
@@ -38,9 +38,12 @@
             </td>
             <td>{{item.country}}</td>
             <td>
-              <button class="btn btn-outline-primary my-2 my-sm-0">
+              <button *ngIf="item.status==0" class="btn btn-outline-primary my-2 my-sm-0" (click)="addFriend(item)">
                 <i class="fas fa-plus"></i>
               </button>
+              <p *ngIf="item.status==1">
+                {{'Have applied' |translate}}
+              </p>
             </td>
           </tr>
 

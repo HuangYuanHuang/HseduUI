@@ -1,18 +1,16 @@
 <div>
-    <div class="card" style="width: 24rem;text-align: center;margin: 0 auto">
-        <img class="card-img-top" src="https://unescoedu.hyhrobot.com/media/profile-images/d91bd480131fe973985f1e1d2925191c_500.jpg?v=1524816692" alt="Card image cap">
+    <div *ngIf="userInfo" class="card" style="width: 24rem;text-align: center;margin: 0 auto">
+        <img class="card-img-top" [src]="userInfo.imageUrlFull" alt="Card image cap">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          <h5 class="card-title">{{userInfo.userName}}</h5>
+          <p class="card-text">{{userInfo.bio}}</p>
         </div>
         <ul class="list-group list-group-flush">
-          <li class="list-group-item">Cras justo odio</li>
-          <li class="list-group-item">Dapibus ac facilisis in</li>
-          <li class="list-group-item">Vestibulum at eros</li>
+          <li class="list-group-item">{{userInfo.country}}</li>
         </ul>
         <div class="card-body">
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
+          <a href="javascript:void(0)" (click)="sendMessage()" class="card-link">{{'Send Message' | translate}}</a>
+        
         </div>
       </div>
 </div>
