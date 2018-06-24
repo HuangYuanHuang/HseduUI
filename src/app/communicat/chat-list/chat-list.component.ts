@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { CourseConfig } from '../../../shard/CourseConfig';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-chat-list',
@@ -12,10 +14,9 @@ export class ChatListComponent implements OnInit, OnChanges {
   @Output() openChatEvent = new EventEmitter<any>();
   @Output() removeChatEvent = new EventEmitter<any>();
   isngOnInit = false;
-  constructor() { }
+  constructor(private httpClient: HttpClient) { }
   ngOnChanges(changes: SimpleChanges) {
     if (this.isngOnInit) {
-
       if (changes['userInfo']) {
         const info = changes['userInfo'].currentValue;
         const res = this.chatNodes.filter(d => d.userDetail.userId === info.userId);
@@ -29,8 +30,6 @@ export class ChatListComponent implements OnInit, OnChanges {
           newInfo.active = 'table-active';
           this.chatNodes.push(newInfo);
         }
-        console.log('chat-list:');
-        console.log(info);
         this.openChatEvent.emit(info);
       }
       if (changes['currentMessage']) {
@@ -39,8 +38,32 @@ export class ChatListComponent implements OnInit, OnChanges {
         if (res && res.length > 0) {
           res[0].text = newMessage.text;
           res[0].time = newMessage.creationTime;
+        } else {
+          this.getUserInfoById(newMessage.userId, newMessage.text);
         }
       }
+    }
+
+  }
+  getUserInfoById(id: any, text: string) {
+    const res = this.chatNodes.filter(d => d.userDetail.userId === id);
+    if (res && res.length > 0) {
+      res[0].time = new Date();
+    } else {
+      const url = `${CourseConfig.CourseRootUrl}/api/services/app/AuthEdxUserService/GetUserById?userId=${id}`;
+      this.httpClient.get<any>(url).subscribe(data => {
+        if (data.success) {
+          const model = new UserModel(data.result.userIndex, data.result.userName, data.result.bio,
+            data.result.imageUrlMedium, data.result.imageUrlFull, data.result.country);
+          const newInfo = new ChatModel(model, new Date());
+          this.chatNodes.push(newInfo);
+          if (this.chatNodes.length === 1) {
+            newInfo.time = new Date();
+            newInfo.text = text;
+            this.openChatEvent.emit(newInfo.userDetail);
+          }
+        }
+      });
     }
 
   }
@@ -73,6 +96,12 @@ class ChatModel {
   public text: string;
   public active = '';
   constructor(public userDetail: any, public time: Date) {
+
+  }
+}
+class UserModel {
+  constructor(public userId: number, public userName: string, public bio: string,
+    public imageUrlMedium: string, public imageUrlFull: string, public country: string) {
 
   }
 }

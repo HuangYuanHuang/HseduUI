@@ -3,6 +3,7 @@ import { RuntimeConfigService } from '../../service/runtime-config-service';
 import { SignalrOnlineChatService, OnlineMessageNode, MessageTypeEnum } from '../../service/signalr-online-chat-service';
 import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-chat-peer',
@@ -16,9 +17,10 @@ export class ChatPeerComponent implements OnInit, OnChanges {
   isFirstLoad = false;
   userMessageMap = new Map<number, MessageModel>();
   currentChatModel = { user: null, nodes: [], text: '' };
+  mediaModel = { user: null, type: '' };
   constructor(private runConfig: RuntimeConfigService,
     private onlineChatService: SignalrOnlineChatService,
-    private http: HttpClient) {
+    private http: HttpClient, private modalService: NgbModal) {
 
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -65,30 +67,34 @@ export class ChatPeerComponent implements OnInit, OnChanges {
 
         setTimeout(() => {
           $('#m-message').scrollTop(50000);
-        }, 3000);
+        }, 100);
       }
     });
   }
   sendMessage() {
     if (this.currentChatModel.text.trim().length > 0) {
-      this.postMesssage(this.currentChatModel.text.trim(), null);
+      this.postMesssage(this.currentChatModel.text.trim(), MessageTypeEnum.Text, null);
       this.currentChatModel.text = '';
       setTimeout(() => {
         $('#m-message').scrollTop(50000);
       }, 100);
     }
   }
-  postMesssage(message: string, callBack) {
-    const chat = new ChatNode(message, this.runConfig.userId, this.currentChatModel.user.userId, MessageTypeEnum.Text, new Date());
+  postMesssage(message: string, type: MessageTypeEnum, callBack) {
+    const chat = new ChatNode(message, this.runConfig.userId, this.currentChatModel.user.userId, type, new Date());
+    if (type !== MessageTypeEnum.Text) {
+      chat.text = 'Media Call';
+    }
     this.currentChatModel.nodes.push(chat);
-    this.userMessageMap.get(this.currentChatModel.user.userId).nodes.push(chat);
+
+    // this.userMessageMap.get(this.currentChatModel.user.userId).nodes.push(chat);
     this.currentMessageEvent.emit(chat);
     this.http.post<any>(`${CourseConfig.CourseRootUrl}${this.createPath}`, {
       fromUserId: this.runConfig.userId,
       toUserId: this.currentChatModel.user.userId,
       message: message,
       courseId: 'Peer-Peer',
-      messageType: MessageTypeEnum.Text
+      messageType: type
     }).subscribe(d => {
       if (d.success) {
         if (callBack) {
@@ -107,14 +113,23 @@ export class ChatPeerComponent implements OnInit, OnChanges {
 
       switch (model.messageType) {
         case MessageTypeEnum.Audio:
+          this.currentMessageEvent.emit(new ChatNode('Audio invitations', model.fromUserId, model.toUserId,
+            model.messageType, model.creationTime));
           break;
         case MessageTypeEnum.Video:
+          this.currentMessageEvent.emit(new ChatNode('Video invitations', model.fromUserId, model.toUserId,
+            model.messageType, model.creationTime));
           break;
         case MessageTypeEnum.Text:
           const chat = new ChatNode(model.message, model.fromUserId, model.toUserId,
             model.messageType, model.creationTime);
-          this.userMessageMap[node.fromUserId].lastChatNode = chat;
-          this.userMessageMap[node.fromUserId].nodes.push(chat);
+          if (!this.userMessageMap.has(node.fromUserId)) {
+            this.userMessageMap.set(node.fromUserId, new MessageModel(null, false, []));
+          }
+          const userMap = this.userMessageMap.get(node.fromUserId);
+          userMap.lastChatNode = chat;
+          //  userMap.nodes.push(chat);
+          this.currentMessageEvent.emit(chat);
           this.currentChatModel.nodes.push(chat);
           setTimeout(() => {
             $('#m-message').scrollTop(50000);
@@ -122,6 +137,15 @@ export class ChatPeerComponent implements OnInit, OnChanges {
           break;
       }
     });
+  }
+  linkInfo(type: string) {
+    this.mediaModel = { user: this.currentChatModel.user, type: type };
+    $('#chat-main').width($('.chat-peer').width() * 0.7);
+    $('#media-main').width($('.chat-peer').width() * 0.3);
+    $('#media-main').show();
+  }
+  sendMediaMessage(model: any) {
+    this.postMesssage(model.channel, model.type, model.callBack);
   }
 }
 
@@ -145,9 +169,3 @@ class ChatNode {
   }
 }
 
-enum ChatStautsEnum {
-  Invitation,
-  Confirm,
-  Accept,
-  Refuse
-}

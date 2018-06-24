@@ -10,7 +10,7 @@ export class SignalrOnlineChatService {
     private connection;
     constructor(runConfig: RuntimeConfigService) {
         this.obMessageNodes = this.subjectReal.asObservable();
-        this.initSignalR(runConfig.courseId, runConfig.userId, runConfig.userName);
+        this.initSignalR('Peer-Peer', runConfig.userId, runConfig.userName);
     }
     initSignalR(courseId: string, userId: any, userName: string) {
         let signalrUrl = `${CourseConfig.signalRRootUrl}/hubs-onlineChatHub?groupId=${encodeURIComponent(courseId)}`;
@@ -37,7 +37,12 @@ export enum MessageTypeEnum {
     Accept,
     Exit
 }
-
+export enum ChatStautsEnum {
+    Invitation,
+    Confirm,
+    Accept,
+    Refuse
+}
 export class OnlineMessageNode {
     constructor(public fromUserId: number, public toUserId: number, public message: string,
         public courseId: string, public messageType: MessageTypeEnum, public isRead: boolean,

@@ -11,6 +11,7 @@ import { ChatPeerComponent } from './chat-peer/chat-peer.component';
 import { ContactListComponent } from './contact-list/contact-list.component';
 import { ContactInfoComponent } from './contact-info/contact-info.component';
 import { SystemNoticeComponent } from './system-notice/system-notice.component';
+import { ChatMediaComponent } from './chat-media/chat-media.component';
 import { SearchComponent } from './search/search.component';
 const appRoutes: Routes = [
   {
@@ -34,7 +35,8 @@ const appRoutes: Routes = [
     ContactListComponent,
     ContactInfoComponent,
     SystemNoticeComponent,
-    SearchComponent
+    SearchComponent,
+    ChatMediaComponent
   ]
 })
 export class CommunicatModule { }
