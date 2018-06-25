@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { CourseConfig } from '../../../shard/CourseConfig';
 import { HttpClient } from '@angular/common/http';
+import { UserModel } from '../../service/signalr-online-chat-service';
 
 @Component({
   selector: 'app-chat-list',
@@ -96,12 +97,6 @@ class ChatModel {
   public text: string;
   public active = '';
   constructor(public userDetail: any, public time: Date) {
-
-  }
-}
-class UserModel {
-  constructor(public userId: number, public userName: string, public bio: string,
-    public imageUrlMedium: string, public imageUrlFull: string, public country: string) {
 
   }
 }

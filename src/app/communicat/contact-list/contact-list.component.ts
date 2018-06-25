@@ -2,6 +2,8 @@ import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
+import { UserModel } from '../../service/signalr-online-chat-service';
+
 @Component({
   selector: 'app-contact-list',
   templateUrl: './contact-list.component.html',
@@ -40,10 +42,4 @@ export class ContactListComponent implements OnInit {
 
 }
 
-class UserModel {
-  public active = '';
-  constructor(public userId: number, public userName: string, public bio: string,
-    public imageUrlMedium: string, public imageUrlFull: string, public country: string) {
 
-  }
-}

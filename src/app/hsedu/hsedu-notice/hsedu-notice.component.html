@@ -1,0 +1,30 @@
+<div class="footer-fixed">
+
+  <div class="btn-group-vertical" role="group" aria-label="Button group with nested dropdown">
+    <button type="button" class="btn btn-info" (click)="open(content)">
+      Profile
+      <span class="badge badge-light">9</span>
+      <span class="sr-only">unread messages</span>
+    </button>
+    <button type="button" class="btn btn-primary">
+      Profile
+      <span class="badge badge-light">9</span>
+      <span class="sr-only">unread messages</span>
+    </button>
+
+
+  </div>
+</div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">chat</h4>
+    <button type="button" class="close" aria-label="Close" (click)="d('Cross click')">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+    <iframe src="http://www.baidu.com" ></iframe>
+
+  </div>
+
+</ng-template>

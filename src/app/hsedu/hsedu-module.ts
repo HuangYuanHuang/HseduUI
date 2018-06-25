@@ -7,6 +7,7 @@ import { HseduCoursePreviewComponent } from './hsedu-course-preview/hsedu-course
 import { RouterModule, Routes } from '@angular/router';
 import { HseduHomeComponent } from './hsedu-home/hsedu-home.component';
 import { HseduCourseListComponent } from './hsedu-course-list/hsedu-course-list.component';
+import { HseduNoticeComponent } from './hsedu-notice/hsedu-notice.component';
 
 const appRoutes: Routes = [
   { path: '', component: HseduHomeComponent },
@@ -28,14 +29,8 @@ const appRoutes: Routes = [
     HseduSlideComponent,
     HseduHomeComponent,
     HseduCoursePreviewComponent,
-    HseduCourseListComponent
-  ],
-  exports: [
-    HseduNavComponent,
-    HseduSlideComponent,
-    HseduCoursePreviewComponent,
-    HseduHomeComponent,
-    HseduCourseListComponent
+    HseduCourseListComponent,
+    HseduNoticeComponent
   ]
 })
 export class HseduModule { }

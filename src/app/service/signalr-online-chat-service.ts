@@ -50,3 +50,9 @@ export class OnlineMessageNode {
     }
 }
 
+export class UserModel {
+    constructor(public userId: number, public userName: string, public bio: string,
+        public imageUrlMedium: string, public imageUrlFull: string, public country: string) {
+
+    }
+}
