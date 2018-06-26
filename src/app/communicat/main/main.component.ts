@@ -20,7 +20,12 @@ export class MainComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    addEventListener('message', (node) => {
+      if (typeof (node.data) === 'string') {
+        console.log(node.data);
+        $(`#pills-${node.data}-tab`).trigger('click');
+      }
+    });
     const userId = this.activeRouter.snapshot.queryParams['toUserId'];
     if (userId) {
       this.getUserInfo(userId);

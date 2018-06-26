@@ -14,11 +14,10 @@ import { RuntimeConfigService } from './service/runtime-config-service';
 import { SignalrNoticeService } from './service/signalr-notice-service';
 import { SignalrPointService } from './service/signalr-point-service';
 import { SignalrOnlineChatService } from './service/signalr-online-chat-service';
-
 import { NgxEchartsModule } from 'ngx-echarts';
 
 export function createTranslateLoader(http: HttpClient) {
-  return new TranslateHttpLoader(http, './assets/i18n/', '.json');
+  return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
 }
 
 @NgModule({
