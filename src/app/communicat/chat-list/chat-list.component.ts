@@ -1,7 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { CourseConfig } from '../../../shard/CourseConfig';
-import { HttpClient } from '@angular/common/http';
-import { UserModel } from '../../service/signalr-online-chat-service';
+import { UserContactService } from '../../service/user-contact-service';
 
 @Component({
   selector: 'app-chat-list',
@@ -15,7 +13,7 @@ export class ChatListComponent implements OnInit, OnChanges {
   @Output() openChatEvent = new EventEmitter<any>();
   @Output() removeChatEvent = new EventEmitter<any>();
   isngOnInit = false;
-  constructor(private httpClient: HttpClient) { }
+  constructor(private userContact: UserContactService) { }
   ngOnChanges(changes: SimpleChanges) {
     if (this.isngOnInit) {
       if (changes['userInfo']) {
@@ -51,20 +49,15 @@ export class ChatListComponent implements OnInit, OnChanges {
     if (res && res.length > 0) {
       res[0].time = new Date();
     } else {
-      const url = `${CourseConfig.CourseRootUrl}/api/services/app/AuthEdxUserService/GetUserById?userId=${id}`;
-      this.httpClient.get<any>(url).subscribe(data => {
-        if (data.success) {
-          const model = new UserModel(data.result.userIndex, data.result.userName, data.result.bio,
-            data.result.imageUrlMedium, data.result.imageUrlFull, data.result.country);
-          const newInfo = new ChatModel(model, new Date());
-          this.chatNodes.push(newInfo);
-          if (this.chatNodes.length === 1) {
-            newInfo.time = new Date();
-            newInfo.text = text;
-            this.openChatEvent.emit(newInfo.userDetail);
-          }
-        }
-      });
+      const userModel = this.userContact.getUserInfoFromCache(id);
+      const newInfo = new ChatModel(userModel, new Date());
+      this.chatNodes.push(newInfo);
+
+      if (this.chatNodes.length === 1) {
+        newInfo.time = new Date();
+        newInfo.text = text;
+        this.openChatEvent.emit(newInfo.userDetail);
+      }
     }
 
   }
@@ -83,9 +76,11 @@ export class ChatListComponent implements OnInit, OnChanges {
     this.openChatEvent.emit(item.userDetail);
   }
   removeUser(item: any, index: number) {
-    this.openChatEvent.emit(item.userDetail);
+   // this.openChatEvent.emit(item.userDetail);
     this.chatNodes.splice(index, 1);
+    console.log(this.chatNodes);
     if (this.chatNodes.length <= 0) {
+      this.chatNodes = [];
       this.openChatEvent.emit(null);
     } else {
       this.chatUser(this.chatNodes[index]);

@@ -6,10 +6,17 @@ import { RuntimeConfigService } from './runtime-config-service';
 export class SignalrOnlineChatService {
 
     private subjectReal = new Subject<OnlineMessageNode>();
+
+    private subjectOnline = new Subject<any>();
+    private subjectNotice = new Subject<any>();
     public obMessageNodes;
+    public obOnlineNodes;
+    public obNoticeNodes;
     private connection;
     constructor(runConfig: RuntimeConfigService) {
         this.obMessageNodes = this.subjectReal.asObservable();
+        this.obNoticeNodes = this.subjectNotice.asObservable();
+        this.obOnlineNodes = this.subjectOnline.asObservable();
         this.initSignalR('Peer-Peer', runConfig.userId, runConfig.userName);
     }
     initSignalR(courseId: string, userId: any, userName: string) {
@@ -23,8 +30,14 @@ export class SignalrOnlineChatService {
                 this.subjectReal.next(new OnlineMessageNode(node.fromUserId, node.toUserId, node.message,
                     node.courseId, node.messageType, node.isRead, node.creationTime));
             });
-
-
+            this.connection.on('onGetUserOnline', (node) => {
+                console.log(node);
+                this.subjectOnline.next(node);
+            });
+            this.connection.on('onGetNotice', (node) => {
+                console.log(node);
+                this.subjectNotice.next(node);
+            });
         });
     }
 }
@@ -50,9 +63,3 @@ export class OnlineMessageNode {
     }
 }
 
-export class UserModel {
-    constructor(public userId: number, public userName: string, public bio: string,
-        public imageUrlMedium: string, public imageUrlFull: string, public country: string) {
-
-    }
-}

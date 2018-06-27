@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
+import { UserContactService } from '../../service/user-contact-service';
+
 @Component({
   selector: 'app-system-notice',
   templateUrl: './system-notice.component.html',
@@ -11,7 +13,10 @@ export class SystemNoticeComponent implements OnInit {
 
   userApplyNodes = [];
   userRequestNodes = [];
-  constructor(private httpClient: HttpClient, private runConfig: RuntimeConfigService) { }
+  constructor(private httpClient: HttpClient, private runConfig: RuntimeConfigService,
+    private userContact: UserContactService) {
+
+  }
 
   ngOnInit() {
     const url = `${CourseConfig.CourseRootUrl}/api/services/app/UserApplyService/GetUserApplys?userId=${this.runConfig.userId}&status=-1`;
@@ -27,10 +32,10 @@ export class SystemNoticeComponent implements OnInit {
         const nodes = [];
         data.result.items.forEach(d => {
           const node = new UserApply(d.fromUserId, d.toUserId, d.creationTime, d.status, d.id);
-          if (isloadFromDetail) {
-            node.loadUserDetail(this.httpClient, d.fromUserId);
-          } else {
-            node.loadUserDetail(this.httpClient, d.toUserId);
+          const userId = isloadFromDetail ? d.fromUserId : d.toUserId;
+          node.userDetail = this.userContact.getUserInfoFromCache(userId);
+          if (node.userDetail == null) {
+            this.userContact.getUserInfoFromHttp(userId, (model) => node.userDetail = model);
           }
           nodes.push(node);
         });
@@ -58,14 +63,5 @@ class UserApply {
   constructor(public fromUserId: number, public toUserId: number,
     public time: Date, public status: number, public id: string) {
 
-  }
-
-  public loadUserDetail(httpClient: HttpClient, userId: number) {
-    const url = `${CourseConfig.CourseRootUrl}/api/services/app/AuthEdxUserService/GetUserById?userId=${userId}`;
-    httpClient.get<any>(url).subscribe(data => {
-      if (data.success) {
-        this.userDetail = data.result;
-      }
-    });
   }
 }

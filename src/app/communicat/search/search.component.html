@@ -15,10 +15,10 @@
 
     <form *ngIf="currentModel" >
       <div class="form-group row">
-        <div class="col-sm-8">
+        <div class="col-sm-9">
           <input type="text" class="form-control" placeholder="UserName" [(ngModel)]="searchName" name="searchName">
         </div>
-        <button type="submit" class="btn btn-primary col-sm-2" (click)="userSearch()">{{'Search'| translate}}</button>
+        <button type="submit" class="btn btn-outline-primary col-sm-2" (click)="userSearch()">{{'Search'| translate}}</button>
       </div>
     </form>
     <div *ngIf="currentModel" class="person-list">

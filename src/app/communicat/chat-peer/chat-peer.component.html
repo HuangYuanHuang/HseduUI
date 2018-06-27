@@ -27,7 +27,7 @@
             <span>{{item.creationTime | date: 'HH:mm:ss'}}</span>
           </p>
           <div class="main " [ngClass]="item.getSelfActive(runConfig)">
-            <img class="avatar" src="/assets/img/chat/2.png" width="30" height="30">
+            <img class="avatar" [src]="item.getUserInfo(userContact).imageUrlMedium" width="30" height="30">
             <div class="text">{{item.text}}</div>
           </div>
         </li>

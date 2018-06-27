@@ -3,7 +3,7 @@ import { RuntimeConfigService } from '../../service/runtime-config-service';
 import { SignalrOnlineChatService, OnlineMessageNode, MessageTypeEnum } from '../../service/signalr-online-chat-service';
 import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { UserContactService, UserModel } from '../../service/user-contact-service';
 
 @Component({
   selector: 'app-chat-peer',
@@ -20,7 +20,7 @@ export class ChatPeerComponent implements OnInit, OnChanges {
   mediaModel = { user: null, type: '' };
   constructor(private runConfig: RuntimeConfigService,
     private onlineChatService: SignalrOnlineChatService,
-    private http: HttpClient, private modalService: NgbModal) {
+    private http: HttpClient, private userContact: UserContactService) {
 
   }
   ngOnChanges(changes: SimpleChanges) {
@@ -166,6 +166,9 @@ class ChatNode {
       return '';
     }
     return 'self';
+  }
+  getUserInfo(userContact: UserContactService): UserModel {
+    return userContact.getUserInfoFromCache(this.userId);
   }
 }
 

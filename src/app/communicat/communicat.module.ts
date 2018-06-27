@@ -13,6 +13,9 @@ import { ContactInfoComponent } from './contact-info/contact-info.component';
 import { SystemNoticeComponent } from './system-notice/system-notice.component';
 import { ChatMediaComponent } from './chat-media/chat-media.component';
 import { SearchComponent } from './search/search.component';
+import { OnlinePipe } from '../pipe/online.pipe';
+import { ChatMessageComponent } from './chat-message/chat-message.component';
+
 const appRoutes: Routes = [
   {
     path: 'main', component: MainComponent, children: [
@@ -29,6 +32,7 @@ const appRoutes: Routes = [
     ),
   ],
   declarations: [
+    OnlinePipe,
     MainComponent,
     ChatListComponent,
     ChatPeerComponent,
@@ -36,7 +40,8 @@ const appRoutes: Routes = [
     ContactInfoComponent,
     SystemNoticeComponent,
     SearchComponent,
-    ChatMediaComponent
+    ChatMediaComponent,
+    ChatMessageComponent
   ]
 })
 export class CommunicatModule { }

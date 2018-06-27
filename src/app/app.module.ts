@@ -14,6 +14,8 @@ import { RuntimeConfigService } from './service/runtime-config-service';
 import { SignalrNoticeService } from './service/signalr-notice-service';
 import { SignalrPointService } from './service/signalr-point-service';
 import { SignalrOnlineChatService } from './service/signalr-online-chat-service';
+import { UserContactService } from './service/user-contact-service';
+
 import { NgxEchartsModule } from 'ngx-echarts';
 
 export function createTranslateLoader(http: HttpClient) {
@@ -22,7 +24,7 @@ export function createTranslateLoader(http: HttpClient) {
 
 @NgModule({
   declarations: [
-    AppComponent,
+    AppComponent
   ],
   imports: [
     NgbModule.forRoot(),
@@ -44,7 +46,8 @@ export function createTranslateLoader(http: HttpClient) {
   providers: [RuntimeConfigService,
     SignalrNoticeService,
     SignalrPointService,
-    SignalrOnlineChatService],
+    SignalrOnlineChatService,
+    UserContactService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
