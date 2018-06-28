@@ -1,51 +1,46 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
 import { SignalrOnlineChatService, OnlineMessageNode, MessageTypeEnum } from '../../service/signalr-online-chat-service';
 import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
-import { UserContactService, UserModel } from '../../service/user-contact-service';
+import { UserContactService, UserModel, EventModel, EventType } from '../../service/user-contact-service';
 
 @Component({
   selector: 'app-chat-peer',
   templateUrl: './chat-peer.component.html',
   styleUrls: ['./chat-peer.component.less']
 })
-export class ChatPeerComponent implements OnInit, OnChanges {
+export class ChatPeerComponent implements OnInit {
   private readonly createPath = '/api/services/app/UserMessageService/Create';
-  @Input() userInfo;
-  @Output() currentMessageEvent = new EventEmitter<any>();
-  isFirstLoad = false;
   userMessageMap = new Map<number, MessageModel>();
   currentChatModel = { user: null, nodes: [], text: '' };
   mediaModel = { user: null, type: '' };
   constructor(private runConfig: RuntimeConfigService,
     private onlineChatService: SignalrOnlineChatService,
     private http: HttpClient, private userContact: UserContactService) {
-
-  }
-  ngOnChanges(changes: SimpleChanges) {
-    if (!this.isFirstLoad) {
-      return;
-    }
-    const current = changes['userInfo'].currentValue;
-    console.log(current);
-    if (current && current === '[remove]') {
-      this.userMessageMap.delete(current.data.userId);
-    } else if (current) {
-      this.currentChatModel.user = current;
-      if (!this.userMessageMap.has(current.userId)) {
-        this.userMessageMap.set(current.userId, new MessageModel(null, false, []));
+    this.userContact.obEventNodes.subscribe(data => {
+      const model = data as EventModel;
+      if (model.type === EventType.OpenChat) {
+        this.currentChatModel.user = model.data;
+        if (!this.userMessageMap.has(model.data.userId)) {
+          this.userMessageMap.set(model.data.userId, new MessageModel(null, false, []));
+        }
+        this.loadMessage(model.data, this.userMessageMap.get(model.data.userId));
+      } else if (model.type === EventType.RemoveUser) {
+        this.userMessageMap.delete(model.data.userDetail.userId);
+        if (this.userMessageMap.size === 0) {
+          this.currentChatModel = { user: null, nodes: [], text: '' };
+        }
       }
-      console.log(this.userMessageMap.get(current.userId));
-      this.loadMessage(current, this.userMessageMap.get(current.userId));
-    } else {
-      this.currentChatModel = { user: null, nodes: [], text: '' };
-    }
+    });
   }
 
   loadMessage(item: any, model: MessageModel) {
     if (model.isLoad) {
       this.currentChatModel.nodes = model.nodes;
+      setTimeout(() => {
+        $('#m-message').scrollTop(50000);
+      }, 100);
       return;
     }
     const getPath = '/api/services/app/UserMessageService/GetMessages';
@@ -60,7 +55,7 @@ export class ChatPeerComponent implements OnInit, OnChanges {
         });
         if (this.currentChatModel.nodes.length > 0) {
           model.lastChatNode = this.currentChatModel.nodes[this.currentChatModel.nodes.length - 1];
-          this.currentMessageEvent.emit(model.lastChatNode);
+          this.userContact.sendEvent(EventType.ChatMessage, model.lastChatNode);
           model.isLoad = true;
           model.nodes = this.currentChatModel.nodes;
         }
@@ -86,9 +81,7 @@ export class ChatPeerComponent implements OnInit, OnChanges {
       chat.text = 'Media Call';
     }
     this.currentChatModel.nodes.push(chat);
-
-    // this.userMessageMap.get(this.currentChatModel.user.userId).nodes.push(chat);
-    this.currentMessageEvent.emit(chat);
+    this.userContact.sendEvent(EventType.ChatMessage, chat);
     this.http.post<any>(`${CourseConfig.CourseRootUrl}${this.createPath}`, {
       fromUserId: this.runConfig.userId,
       toUserId: this.currentChatModel.user.userId,
@@ -105,7 +98,6 @@ export class ChatPeerComponent implements OnInit, OnChanges {
   }
   ngOnInit() {
     this.initGetChatMessage();
-    this.isFirstLoad = true;
   }
   initGetChatMessage() {
     this.onlineChatService.obMessageNodes.subscribe(node => {
@@ -113,11 +105,11 @@ export class ChatPeerComponent implements OnInit, OnChanges {
 
       switch (model.messageType) {
         case MessageTypeEnum.Audio:
-          this.currentMessageEvent.emit(new ChatNode('Audio invitations', model.fromUserId, model.toUserId,
+          this.userContact.sendEvent(EventType.ChatMessage, new ChatNode('Audio invitations', model.fromUserId, model.toUserId,
             model.messageType, model.creationTime));
           break;
         case MessageTypeEnum.Video:
-          this.currentMessageEvent.emit(new ChatNode('Video invitations', model.fromUserId, model.toUserId,
+          this.userContact.sendEvent(EventType.ChatMessage, new ChatNode('Video invitations', model.fromUserId, model.toUserId,
             model.messageType, model.creationTime));
           break;
         case MessageTypeEnum.Text:
@@ -128,8 +120,7 @@ export class ChatPeerComponent implements OnInit, OnChanges {
           }
           const userMap = this.userMessageMap.get(node.fromUserId);
           userMap.lastChatNode = chat;
-          //  userMap.nodes.push(chat);
-          this.currentMessageEvent.emit(chat);
+          this.userContact.sendEvent(EventType.ChatMessage, chat);
           this.currentChatModel.nodes.push(chat);
           setTimeout(() => {
             $('#m-message').scrollTop(50000);

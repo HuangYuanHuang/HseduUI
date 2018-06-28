@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
+import { UserContactService, EventType, EventModel } from '../../service/user-contact-service';
 
 @Component({
   selector: 'app-contact-info',
@@ -6,13 +7,22 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
   styleUrls: ['./contact-info.component.less']
 })
 export class ContactInfoComponent implements OnInit {
-  @Input() userInfo;
-  @Output() chatUserEvent = new EventEmitter<any>();
-  constructor() { }
+  userInfo;
+  constructor(private userContact: UserContactService) {
+    this.userContact.obEventNodes.subscribe(data => {
+      const model = data as EventModel;
+      if (model.type === EventType.ContactInfo) {
+        this.userInfo = model.data;
+      }
+
+    });
+
+  }
 
   ngOnInit() {
   }
   sendMessage() {
-    this.chatUserEvent.emit(this.userInfo);
+    this.userContact.sendEvent(EventType.ChatInfo, this.userInfo);
+    $('#pills-chat-tab').trigger('click');
   }
 }

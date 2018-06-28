@@ -1,38 +1,31 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { UserContactService } from '../../service/user-contact-service';
+import { Component, OnInit } from '@angular/core';
+import { UserContactService, EventModel, EventType } from '../../service/user-contact-service';
 
 @Component({
   selector: 'app-chat-list',
   templateUrl: './chat-list.component.html',
   styleUrls: ['./chat-list.component.less']
 })
-export class ChatListComponent implements OnInit, OnChanges {
+export class ChatListComponent implements OnInit {
   chatNodes = [];
-  @Input() userInfo;
-  @Input() currentMessage;
-  @Output() openChatEvent = new EventEmitter<any>();
-  @Output() removeChatEvent = new EventEmitter<any>();
-  isngOnInit = false;
-  constructor(private userContact: UserContactService) { }
-  ngOnChanges(changes: SimpleChanges) {
-    if (this.isngOnInit) {
-      if (changes['userInfo']) {
-        const info = changes['userInfo'].currentValue;
+  constructor(private userContact: UserContactService) {
+    this.userContact.obEventNodes.subscribe(data => {
+      const model = data as EventModel;
+      if (model.type === EventType.ChatInfo) {
+        const info = model.data;
         const res = this.chatNodes.filter(d => d.userDetail.userId === info.userId);
+        this.chatNodes.forEach(d => d.active = '');
         if (res && res.length > 0) {
           res[0].time = new Date();
-          this.chatNodes.forEach(d => d.active = '');
           res[0].active = 'table-active';
         } else {
-          this.chatNodes.forEach(d => d.active = '');
           const newInfo = new ChatModel(info, new Date());
           newInfo.active = 'table-active';
           this.chatNodes.push(newInfo);
         }
-        this.openChatEvent.emit(info);
-      }
-      if (changes['currentMessage']) {
-        const newMessage = changes['currentMessage'].currentValue;
+        this.userContact.sendEvent(EventType.OpenChat, info);
+      } else if (model.type === EventType.ChatMessage) {
+        const newMessage = model.data;
         const res = this.chatNodes.filter(d => d.userDetail.userId === newMessage.userId || d.userDetail.userId === newMessage.toUserId);
         if (res && res.length > 0) {
           res[0].text = newMessage.text;
@@ -41,9 +34,9 @@ export class ChatListComponent implements OnInit, OnChanges {
           this.getUserInfoById(newMessage.userId, newMessage.text);
         }
       }
-    }
-
+    });
   }
+
   getUserInfoById(id: any, text: string) {
     const res = this.chatNodes.filter(d => d.userDetail.userId === id);
     if (res && res.length > 0) {
@@ -56,13 +49,12 @@ export class ChatListComponent implements OnInit, OnChanges {
       if (this.chatNodes.length === 1) {
         newInfo.time = new Date();
         newInfo.text = text;
-        this.openChatEvent.emit(newInfo.userDetail);
+        this.userContact.sendEvent(EventType.OpenChat, newInfo.userDetail);
       }
     }
 
   }
   ngOnInit() {
-    this.isngOnInit = true;
     $('#table-chat-list').on('mouseover', 'tbody tr', function () {
       $('.opera-btn button', this).show();
     });
@@ -73,16 +65,12 @@ export class ChatListComponent implements OnInit, OnChanges {
   chatUser(item: any) {
     this.chatNodes.forEach(d => d.active = '');
     item.active = 'table-active';
-    this.openChatEvent.emit(item.userDetail);
+    this.userContact.sendEvent(EventType.OpenChat, item.userDetail);
   }
   removeUser(item: any, index: number) {
-   // this.openChatEvent.emit(item.userDetail);
+    this.userContact.sendEvent(EventType.RemoveUser, item);
     this.chatNodes.splice(index, 1);
-    console.log(this.chatNodes);
-    if (this.chatNodes.length <= 0) {
-      this.chatNodes = [];
-      this.openChatEvent.emit(null);
-    } else {
+    if (this.chatNodes.length > 0) {
       this.chatUser(this.chatNodes[index]);
     }
   }

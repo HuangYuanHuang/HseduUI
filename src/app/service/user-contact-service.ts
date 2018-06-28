@@ -6,12 +6,14 @@ import { HttpClient } from '@angular/common/http';
 
 @Injectable()
 export class UserContactService {
-
+    private subjectEvent = new Subject<EventModel>();
     private subjectReal = new Subject<UserModel[]>();
     public obUserNodes;
+    public obEventNodes;
     private userMap = new Map<number, UserModel>();
     constructor(private runConfig: RuntimeConfigService, private httpClient: HttpClient) {
         this.obUserNodes = this.subjectReal.asObservable();
+        this.obEventNodes = this.subjectEvent.asObservable();
         this.initData();
     }
     initData() {
@@ -33,6 +35,10 @@ export class UserContactService {
             }
         });
 
+    }
+
+    public sendEvent(type: EventType, data: any) {
+        this.subjectEvent.next(new EventModel(type, data));
     }
     public getUserSelfInfo(callBack) {
         const find = this.getUserInfoFromCache(this.runConfig.userId);
@@ -67,6 +73,20 @@ export class UserContactService {
         return null;
     }
 }
+
+export enum EventType {
+    ContactInfo,
+    ChatInfo,
+    OpenChat,
+    ChatMessage,
+    RemoveUser
+}
+export class EventModel {
+    constructor(public type: EventType, public data: any) {
+
+    }
+}
+
 export class UserModel {
     constructor(public userId: number, public userName: string, public bio: string,
         public imageUrlMedium: string, public imageUrlFull: string, public country: string, public isOnline: boolean) {
