@@ -28,7 +28,7 @@ export class SignalrOnlineChatService {
             console.log('Connection onlineChatHub is  start');
             this.connection.on('onGetChatMessage', (node) => {
                 this.subjectReal.next(new OnlineMessageNode(node.fromUserId, node.toUserId, node.message,
-                    node.courseId, node.messageType, node.isRead, node.creationTime));
+                    node.courseId, node.messageType, node.isRead, node.creationTime, node.id));
             });
             this.connection.on('onGetUserOnline', (node) => {
                 console.log(node);
@@ -59,7 +59,7 @@ export enum ChatStautsEnum {
 export class OnlineMessageNode {
     constructor(public fromUserId: number, public toUserId: number, public message: string,
         public courseId: string, public messageType: MessageTypeEnum, public isRead: boolean,
-        public creationTime: Date) {
+        public creationTime: Date, public msgId: number) {
     }
 }
 

@@ -50,20 +50,31 @@ export class ChatPeerComponent implements OnInit {
       if (d.success) {
         this.currentChatModel.nodes = [];
         d.result.items.forEach(node => {
-          this.currentChatModel.nodes.push(new ChatNode(node.message, node.fromUserId,
-            node.toUserId, node.messageType, node.creationTime));
+          const temp = new ChatNode(node.message, node.fromUserId, node.toUserId, node.messageType, node.creationTime);
+          temp.msgId = node.id;
+          this.currentChatModel.nodes.push(temp);
         });
         if (this.currentChatModel.nodes.length > 0) {
           model.lastChatNode = this.currentChatModel.nodes[this.currentChatModel.nodes.length - 1];
           this.userContact.sendEvent(EventType.ChatMessage, model.lastChatNode);
           model.isLoad = true;
           model.nodes = this.currentChatModel.nodes;
+          this.changeMessageReader(model.lastChatNode.msgId);
         }
 
         setTimeout(() => {
           $('#m-message').scrollTop(50000);
         }, 100);
       }
+    });
+  }
+
+  changeMessageReader(msgId: number) {
+    const url = `${CourseConfig.CourseRootUrl}/api/services/app/UserMessageService/ChangeMessageRead?msgId=${msgId}`;
+    this.http.post<any>(url, {
+      msgId: msgId
+    }).subscribe(d => {
+
     });
   }
   sendMessage() {
@@ -98,6 +109,24 @@ export class ChatPeerComponent implements OnInit {
   }
   ngOnInit() {
     this.initGetChatMessage();
+    setTimeout(() => {
+      this.GetUnreadMessage();
+    }, 1000);
+
+  }
+
+  GetUnreadMessage() {
+    const url = `${CourseConfig.CourseRootUrl}/api/services/app/UserMessageService/GetUnreadMessage?toUserId=${this.runConfig.userId}&courseId=Peer-Peer`;
+    this.http.get<any>(url).subscribe(d => {
+      if (d.success) {
+        d.result.items.forEach(item => {
+          const userInfo = this.userContact.getUserInfoFromCache(item.userId);
+          if (userInfo) {
+            this.userContact.sendEvent(EventType.ChatInfo, userInfo);
+          }
+        });
+      }
+    });
   }
   initGetChatMessage() {
     this.onlineChatService.obMessageNodes.subscribe(node => {
@@ -121,7 +150,11 @@ export class ChatPeerComponent implements OnInit {
           const userMap = this.userMessageMap.get(node.fromUserId);
           userMap.lastChatNode = chat;
           this.userContact.sendEvent(EventType.ChatMessage, chat);
-          this.currentChatModel.nodes.push(chat);
+          userMap.nodes.push(chat);
+          if (model.fromUserId === this.currentChatModel.user.userId) {
+            console.log(node);
+            this.changeMessageReader(node.msgId);
+          }
           setTimeout(() => {
             $('#m-message').scrollTop(50000);
           }, 100);
@@ -135,6 +168,9 @@ export class ChatPeerComponent implements OnInit {
     $('#media-main').width($('.chat-peer').width() * 0.3);
     $('#media-main').show();
   }
+  openMessage() {
+    this.userContact.sendEvent(EventType.MessageHis, this.currentChatModel.user);
+  }
   sendMediaMessage(model: any) {
     this.postMesssage(model.channel, model.type, model.callBack);
   }
@@ -147,6 +183,7 @@ class MessageModel {
   }
 }
 class ChatNode {
+  public msgId: number;
   constructor(public text: string, public userId: number, public toUserId: number,
     public messageType: number, public creationTime: Date) {
 

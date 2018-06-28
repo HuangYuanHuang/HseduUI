@@ -1,3 +1,49 @@
-<p>
-  chat-message works!
-</p>
+<div class="row">
+  <div class="contact-list">
+    <table class="table table-hover">
+
+      <tbody>
+
+        <tr *ngFor="let item of userNodes" (click)="setUser(item)" [ngClass]="item.active">
+          <th scope="row">
+            <img [src]="item.imageUrlMedium" alt="">
+          </th>
+          <td>
+            <div>
+              <h5>
+                <strong>{{item.userName}}</strong>
+              </h5>
+              <p>{{item.bio}}</p>
+            </div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="chat-message" *ngIf="messageNodes.length>1">
+    <div class="message-list">
+      <table class="table table-hover">
+
+        <tbody>
+
+          <tr *ngFor="let item of messageNodes">
+
+            <td>
+              <div>
+                <p class="user-p" [ngClass]="item.color"><strong>{{item.userInfo.userName}}</strong> &nbsp;&nbsp; {{item.time| date: 'MM-dd HH:mm:ss'}}</p>
+                <p class="user-text">{{item.text}}</p>
+              </div>
+            </td>
+
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div>
+      <ngb-pagination class="d-flex justify-content-center" (pageChange)="pageChange($event)" [collectionSize]="total"
+        [(page)]="currentPage" [(pageSize)]="pageSize" [maxSize]="5" [boundaryLinks]="true"></ngb-pagination>
+    </div>
+  </div>
+</div>

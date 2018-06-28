@@ -10,6 +10,8 @@ export class UserContactService {
     private subjectReal = new Subject<UserModel[]>();
     public obUserNodes;
     public obEventNodes;
+    public userApplyNodes = [];
+    public userRequestNodes = [];
     private userMap = new Map<number, UserModel>();
     constructor(private runConfig: RuntimeConfigService, private httpClient: HttpClient) {
         this.obUserNodes = this.subjectReal.asObservable();
@@ -79,7 +81,10 @@ export enum EventType {
     ChatInfo,
     OpenChat,
     ChatMessage,
-    RemoveUser
+    RemoveUser,
+    UserApply,
+    UserRequest,
+    MessageHis
 }
 export class EventModel {
     constructor(public type: EventType, public data: any) {

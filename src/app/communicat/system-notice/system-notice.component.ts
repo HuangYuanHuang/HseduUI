@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
 import { UserContactService } from '../../service/user-contact-service';
-
+import { SignalrOnlineChatService } from '../../service/signalr-online-chat-service';
 @Component({
   selector: 'app-system-notice',
   templateUrl: './system-notice.component.html',
@@ -14,15 +14,36 @@ export class SystemNoticeComponent implements OnInit {
   userApplyNodes = [];
   userRequestNodes = [];
   constructor(private httpClient: HttpClient, private runConfig: RuntimeConfigService,
-    private userContact: UserContactService) {
-
+    private userContact: UserContactService, private onlineService: SignalrOnlineChatService) {
+    this.onlineService.obNoticeNodes.subscribe(node => {
+      console.log('NOTICE');
+      const model = new UserApply(node.fromUserId, node.toUserId, node.creationTime, node.status, node.id);
+      const userId = model.fromUserId === runConfig.userId ? model.toUserId : model.fromUserId;
+      model.userDetail = this.userContact.getUserInfoFromCache(userId);
+      if (node.userDetail == null) {
+        this.userContact.getUserInfoFromHttp(userId, (d) => model.userDetail = d);
+      }
+      if (model.fromUserId === runConfig.userId) {
+        this.userApplyNodes.unshift(model);
+        this.userContact.userApplyNodes.push(model);
+      } else {
+        this.userRequestNodes.unshift(model);
+        this.userContact.userRequestNodes.push(model);
+      }
+    });
   }
 
   ngOnInit() {
     const url = `${CourseConfig.CourseRootUrl}/api/services/app/UserApplyService/GetUserApplys?userId=${this.runConfig.userId}&status=-1`;
-    this.loadApplys(url, (nodes) => this.userRequestNodes = nodes, true);
+    this.loadApplys(url, (nodes) => {
+      this.userRequestNodes = nodes;
+      this.userContact.userRequestNodes = nodes;
+    }, true);
     const requestUrl = `${CourseConfig.CourseRootUrl}/api/services/app/UserApplyService/GetFromUserApplys?userId=${this.runConfig.userId}&status=-1`;
-    this.loadApplys(requestUrl, (nodes) => this.userApplyNodes = nodes);
+    this.loadApplys(requestUrl, (nodes) => {
+      this.userApplyNodes = nodes;
+      this.userContact.userApplyNodes = nodes;
+    });
   }
 
   loadApplys(url: string, callBack, isloadFromDetail = false) {

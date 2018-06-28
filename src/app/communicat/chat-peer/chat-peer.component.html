@@ -33,9 +33,15 @@
         </li>
         <!--v-for-end-->
       </ul>
+
     </div>
     <!--v-component-->
-
+    <div style="text-align: right;">
+      <button type="button" class="btn btn-light btn-sm" (click)="openMessage()">
+          <i class="fas fa-comment-alt"></i>
+      </button>
+    
+    </div>
     <div class="m-text">
       <textarea name="messageContext" [(ngModel)]="currentChatModel.text" (keyup.enter)="sendMessage()" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}"></textarea>
     </div>
