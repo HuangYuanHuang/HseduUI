@@ -29,7 +29,8 @@ export class CourseFileComponent implements OnInit {
       const subject = node as NoticeModel;
       console.log(subject);
       if (subject.type === NoticeTypeEnum.CourseFileCreate) {
-        this.fileNodes.push(new CourseFileModel(this.isTeacher, subject.data.fileName, subject.data.path, this.pointService));
+        this.fileNodes.push(new CourseFileModel(this.isTeacher, subject.data.fileName, subject.data.path, subject.data.convert, subject.data.pageCount,
+          this.pointService));
         setTimeout(() => {
           $('.file-list').scrollTop(50000);
         }, 100);
@@ -59,7 +60,7 @@ export class CourseFileComponent implements OnInit {
       if (data.success) {
         this.fileNodes = [];
         data.result.items.forEach(item => {
-          this.fileNodes.push(new CourseFileModel(this.isTeacher, item.fileName, item.path, this.pointService));
+          this.fileNodes.push(new CourseFileModel(this.isTeacher, item.fileName, item.path, item.convert, item.pageCount, this.pointService));
         });
       }
     });
@@ -78,6 +79,7 @@ export class CourseFileComponent implements OnInit {
 class CourseFileModel {
   private readonly downPath = '/coursefile/download?path=';
   public canConvert = false;
+  public canPlay = false;
   public imageNodes = [];
   public convertBtnReadonly = false;
   public showProgress = false;
@@ -86,24 +88,32 @@ class CourseFileModel {
   public progressValue = 0;
   public imageCount = 0;
   constructor(public isTeach: boolean, public fileName: string,
-    public path: string, private pointService: SignalrPointService) {
+    public path: string, public convert: boolean, public pageCount, private pointService: SignalrPointService) {
     if (isTeach && fileName.toLocaleLowerCase().indexOf('ppt') > -1) {
-      this.canConvert = true;
+      if (this.convert) {
+        this.canPlay = true;
+        this.loadImageNodes(new CoursePointModel('', '', this.pageCount, true, 4));
+      } else {
+        this.canConvert = true;
+      }
+
     }
   }
   fileConvert() {
-    if (this.convertFinished) {
-      this.pointService.pushImages(this.imageNodes);
-      return;
-    }
     this.showProgress = true;
-    this.progressValue = 0.1;
+    this.progressValue = 1;
     this.pointService.convertFile(this.path, () => {
       console.log('File Is Convert Finished');
     });
+
+  }
+  filePlay() {
+    this.pointService.pushImages(this.imageNodes);
+    $('#nav-power-tab').trigger('click');
   }
   setProgress(value: CoursePointModel) {
     if (!value.success) {
+      this.convertFinished = true;
       setTimeout(() => {
         this.showProgress = false;
         this.trClass = 'table-danger';
@@ -111,18 +121,15 @@ class CourseFileModel {
       }, 1000);
       return;
     }
-    if (this.progressValue < value.progress) {
-      this.progressValue = value.progress;
-    }
+    this.canConvert = false;
+    this.canPlay = true;
+    this.convertFinished = true;
     this.loadImageNodes(value);
-    if (this.progressValue === 4) {
-      this.convertFinished = true;
-      setTimeout(() => {
-        this.showProgress = false;
-        this.trClass = 'table-success';
-        this.progressValue = 0;
-      }, 1000);
-    }
+    setTimeout(() => {
+      this.showProgress = false;
+      this.trClass = 'table-success';
+      this.progressValue = 0;
+    }, 1000);
   }
   fileDownload() {
     const url = `${CourseConfig.CourseRootUrl}${this.downPath}${this.path}`;
@@ -130,13 +137,10 @@ class CourseFileModel {
     window.open(url);
   }
   loadImageNodes(value: CoursePointModel) {
-    if (this.progressValue >= 3 && this.imageCount < value.total) {
-      let currentIndex = this.imageCount + 1;
-      let appendCount = value.total - this.imageCount;
-      while (appendCount-- > 0) {
-        this.imageNodes.push(`${CourseConfig.ConvertImageUrl}/${this.path}/ppt${currentIndex++}.jpg`);
-      }
-      this.pointService.pushImages(this.imageNodes);
+    let currentIndex = 1;
+    let appendCount = value.total;
+    while (appendCount-- > 0) {
+      this.imageNodes.push(`${CourseConfig.ConvertImageUrl}?path=${this.path}&name=ppt${currentIndex++}.jpg`);
     }
   }
 
