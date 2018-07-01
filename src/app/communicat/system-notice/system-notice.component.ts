@@ -16,7 +16,6 @@ export class SystemNoticeComponent implements OnInit {
   constructor(private httpClient: HttpClient, private runConfig: RuntimeConfigService,
     private userContact: UserContactService, private onlineService: SignalrOnlineChatService) {
     this.onlineService.obNoticeNodes.subscribe(node => {
-      console.log('NOTICE');
       const model = new UserApply(node.fromUserId, node.toUserId, node.creationTime, node.status, node.id);
       const userId = model.fromUserId === runConfig.userId ? model.toUserId : model.fromUserId;
       model.userDetail = this.userContact.getUserInfoFromCache(userId);

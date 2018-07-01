@@ -3,6 +3,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { RuntimeConfigService } from './service/runtime-config-service';
 import { SignalrPointService } from './service/signalr-point-service';
 import { SignalrNoticeService } from './service/signalr-notice-service';
+import { UserContactService } from './service/user-contact-service';
 
 @Component({
   selector: 'app-root',
@@ -14,7 +15,8 @@ export class AppComponent {
   constructor(public translateService: TranslateService,
     runtime: RuntimeConfigService,
     signalrPoint: SignalrPointService,
-    noticeService: SignalrNoticeService) {
+    noticeService: SignalrNoticeService,
+    private userContact: UserContactService) {
   }
 
 

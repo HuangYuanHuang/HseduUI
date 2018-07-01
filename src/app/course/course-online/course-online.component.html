@@ -11,9 +11,18 @@
           {{item.userName}}
         </td>
         <td>
-          <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="item.userId!=runConfig.userId">
+          <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="item.status==1" (click)="chat(item)">
             <i class="fab fa-rocketchat"></i>
           </button>
+          <button *ngIf="item.status==-1" class="btn btn-outline-primary my-2 my-sm-0" (click)="addFriend(item)">
+            <i class="fas fa-plus"></i>
+          </button>
+          <p *ngIf="item.status==0">
+            {{'Have applied' |translate}}
+          </p>        
+          <p *ngIf="item.status==2">
+            {{'Refuse' |translate}}
+          </p>
         </td>
 
       </tr>
