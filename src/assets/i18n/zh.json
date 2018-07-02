@@ -27,6 +27,15 @@
   "Video invitations": "来自 {{Name}} 的视频邀请",
   "Accept": "接受",
   "Refuse": "拒绝",
-  "The other party rejected your call": "对方拒绝了你的通话"
+  "The other party rejected your call": "对方拒绝了你的通话",
+  "The message list is empty":"暂未有聊天列表",
+  "Friends":"好友",
+  "Online":"在线好友",
+  "Notice":"通知",
+  "Search":"搜索",
+  "Message":"消息列表",
+  "Contacts":"联系人",
+  "Apply List":"我的申请",
+  "Friend Requests":"好友请求"
 
 }
