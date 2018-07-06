@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { AgoraServiceService, SubjectVideo, AgoraEnum } from '../../service/agora-service.service';
+import { AgoraServiceService, SubjectVideo, AgoraEnum, AgoraVideoNode } from '../../service/agora-service.service';
+import { UserContactService } from '../../service/user-contact-service';
+
 @Component({
   selector: 'app-course-video',
   templateUrl: './course-video.component.html',
@@ -7,7 +9,10 @@ import { AgoraServiceService, SubjectVideo, AgoraEnum } from '../../service/agor
 })
 export class CourseVideoComponent implements OnInit {
   public videoNodes = [];
-  constructor(private agoraService: AgoraServiceService) {
+  private currentPoper = { user: null, node: null };
+  private currentContent = [];
+  private interval = null;
+  constructor(private agoraService: AgoraServiceService, private userContact: UserContactService) {
     this.agoraService.changeVideOb.subscribe(node => {
       const subject = node as SubjectVideo;
       if (!subject.is_teacher && subject.aogra === AgoraEnum.Connect && !subject.is_peer) {
@@ -32,7 +37,49 @@ export class CourseVideoComponent implements OnInit {
     });
 
   }
+
+  itemPover(item: AgoraVideoNode, cotnent: any) {
+    if (cotnent.isOpen()) {
+      cotnent.close();
+      while (this.currentContent.length > 0) {
+        this.currentContent.pop().close();
+      }
+      return;
+    }
+    while (this.currentContent.length > 0) {
+      this.currentContent.pop().close();
+    }
+    const userId = item.getStreamId();
+    this.currentPoper.node = item;
+    this.currentContent.push(cotnent);
+    const userInfo = this.userContact.getUserInfoFromCache(userId);
+    if (userInfo === null) {
+      this.userContact.getUserInfoFromHttp(userId, (d) => {
+        this.currentPoper.user = d;
+        cotnent.open();
+        this.clearOrOpenInterval();
+      });
+    } else {
+      this.currentPoper.user = userInfo;
+      console.log(userInfo);
+      cotnent.open();
+      this.clearOrOpenInterval();
+    }
+
+  }
+  clearOrOpenInterval() {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+    this.interval = setInterval(() => {
+      while (this.currentContent.length > 0) {
+        this.currentContent.pop().close();
+      }
+    }, 5000);
+  }
+
   ngOnInit() {
+
   }
 
 }

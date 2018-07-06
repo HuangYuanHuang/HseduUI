@@ -11,6 +11,7 @@ export class CoursePointComponent implements OnInit {
   constructor(private pointService: SignalrPointService) {
     this.pointService.obSlaveNodes.subscribe(url => {
       this.currentPath = url;
+      $('#nav-power-tab').trigger('click');
     });
 
   }

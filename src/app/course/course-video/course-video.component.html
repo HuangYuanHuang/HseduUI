@@ -3,22 +3,23 @@
     <div class="card-body text-primary text-center" style="padding:0.25rem">
 
       <div id="video-person-card">
-        <h3 style="padding-top: 100px" *ngIf="!videoNodes">没有学生在课堂</h3>
+        <h3 style="padding-top: 100px" *ngIf="!videoNodes">{{'No students are in the classroom'|translate}}</h3>
 
-        <div class="video-play" *ngFor="let item of videoNodes" id="{{item.getStreamId()}}" >
-          <!-- <div class="mouse-video" >
-            <ul>
-              <ol class="mouse-video-person" ng-click="item.playAudio()">
-
-              </ol>
-              <ol class="mouse-video-person" ng-click="item.playVideo()">
-
-              </ol>
-            </ul>
-
-          </div> -->
-        </div>
+        <div class="video-play" *ngFor="let item of videoNodes" id="{{item.getStreamId()}}" #p="ngbPopover" (click)="itemPover(item,p)" [ngbPopover]="popContent" triggers="manual"  placement="left" popoverTitle="{{'Information'|translate}}">
+       
       </div>
     </div>
   </div>
 </div>
+
+<ng-template #popContent let-greeting="greeting">
+  <div>
+    <p><strong>{{currentPoper.user.userName}}</strong></p>
+      <button type="button" class="btn btn-sm " (click)="currentPoper.node.playVideo()" [ngClass]="currentPoper.node.videoBtnClass">
+          <i class="fas fa-1x " [ngClass]="currentPoper.node.videoIonClass"></i>
+        </button>
+        <button type="button" class="btn btn-sm " (click)="currentPoper.node.playAudio()" [ngClass]="currentPoper.node.audioBtnClass">
+          <i class="fas fa-1x " [ngClass]="currentPoper.node.audioIonClass"></i>
+        </button>
+  </div>
+  </ng-template>
