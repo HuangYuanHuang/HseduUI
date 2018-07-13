@@ -11,7 +11,8 @@ export class HseduSlideComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.images = ['/assets/img/slide/1.png', '/assets/img/slide/2.png', '/assets/img/slide/3.png'];
+    this.images = ['/assets/img/slide/index-car01.jpg', '/assets/img/slide/index-car02.jpg',
+      '/assets/img/slide/index-car03.jpg', '/assets/img/slide/index-car04.jpg'];
   }
 
 }

@@ -8,16 +8,19 @@ import { RouterModule, Routes } from '@angular/router';
 import { HseduHomeComponent } from './hsedu-home/hsedu-home.component';
 import { HseduCourseListComponent } from './hsedu-course-list/hsedu-course-list.component';
 import { HseduNoticeComponent } from './hsedu-notice/hsedu-notice.component';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { HseduFooterComponent } from './hsedu-footer/hsedu-footer.component';
+import { HseduFeatureComponent } from './hsedu-feature/hsedu-feature.component';
 const appRoutes: Routes = [
   { path: '', component: HseduHomeComponent },
-  { path: 'course-list', component: HseduCourseListComponent }
+  { path: 'course-list', component: HseduCourseListComponent },
+  { path: 'feature', component: HseduFeatureComponent }
 ];
 
 
 @NgModule({
   imports: [
-    CommonModule,
+    CommonModule, TranslateModule,
     RouterModule.forRoot(
       appRoutes
     ),
@@ -30,7 +33,9 @@ const appRoutes: Routes = [
     HseduHomeComponent,
     HseduCoursePreviewComponent,
     HseduCourseListComponent,
-    HseduNoticeComponent
+    HseduNoticeComponent,
+    HseduFooterComponent,
+    HseduFeatureComponent
   ]
 })
 export class HseduModule { }

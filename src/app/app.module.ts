@@ -18,13 +18,14 @@ import { UserContactService } from './service/user-contact-service';
 
 import { NgxEchartsModule } from 'ngx-echarts';
 
+
 export function createTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, `./assets/i18n/`, '.json');
 }
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
   ],
   imports: [
     NgbModule.forRoot(),

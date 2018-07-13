@@ -36,8 +36,8 @@
   "Students": "人数",
   "finished": "完成",
   "unfinished": "未完成",
-  "View the results":"查看结果",
-  "Participation in voting":"参与投票",
+  "View the results": "查看结果",
+  "Participation in voting": "参与投票",
   "Time": "创建时间",
   "Launch Vote": "发起投票",
   "Result Is Public": "结果是否公开",
@@ -60,6 +60,20 @@
   "Apply List": "我的申请",
   "Friend Requests": "好友请求",
   "Information": "个人信息",
-  "No students are in the classroom": "没有学生在课堂"
+  "No students are in the classroom": "没有学生在课堂",
+  "Everything You Need for Training Learning": "学习培训所需，一切准备就绪",
+  "Exclusive Domain": "专属域名",
+  "Course Production": "课程制作",
+  "Exercises Exams": "作业与考试",
+  "Statistic Report": "学习统计",
+  "One-to-One": "一对一答疑",
+  "Access Allocation": "学员权限",
+  "Customization": "个性化功能定制",
+  "Learn more": "了解更多",
+  "E-ducation Online Learning and Training Platform": "E-ducation在线学习培训平台",
+  "Easy Efficient Beyond Expectations": "轻松·高效·超越期待",
+  "Log in": "登录",
+  "Free Trial": "免费体验",
+  "Features":"功能"
 
 }

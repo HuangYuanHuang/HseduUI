@@ -17,6 +17,7 @@ export class AppComponent {
     signalrPoint: SignalrPointService,
     noticeService: SignalrNoticeService,
     private userContact: UserContactService) {
+
   }
 
 

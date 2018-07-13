@@ -1,0 +1,124 @@
+.company-dec h2 {
+  font-size: 36px;
+}
+
+.company-dec h2 {
+  font-size: 30px;
+  font-family: DIN-Bold1;
+}
+
+.company-dec h2 {
+  font-size: 36px;
+  color: #434A54;
+  text-align: center;
+  height: 94px;
+  line-height: 94px;
+  margin-bottom: 20px;
+  margin-top: 32px;
+  font-weight: 400;
+}
+
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.company-dec .company-box ul li p {
+  color: #434A54;
+  font-size: 16px;
+  text-align: center;
+}
+
+.company-dec .company-box ul li div {
+  margin-top: 38px;
+  margin: 0 auto;
+  margin-bottom: 0px;
+  text-align: center;
+  line-height: 90px;
+  margin-bottom: 18px;
+}
+
+.company-dec .company-box ul li {
+  float: left;
+  height: 174px;
+}
+
+.company-dec .company-more {
+  width: 300px;
+  height: 40px;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  border: 1px solid #0692E1;
+  display: block;
+  margin: 0 auto;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  text-align: center;
+  line-height: 38px;
+  margin-bottom: 74px;
+  margin-top: 20px;
+  color: #0692E1;
+  border-radius: 4px;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+.company-dec .company-box ul li div img {
+  display: inline-block;
+  margin: 0 auto;
+  vertical-align: middle;
+  width: 50px;
+}
+.mooc-box {
+  position: relative;
+  padding: 0 15px;
+}
+
+.mooc-box p {
+  font-size: 24px;
+}
+
+.mooc-box p {
+  font-family: DIN-Medium2;
+}
+
+.mooc-box p {
+  width: 100%;
+  font-size: 24px;
+  color: #ffffff;
+  position: absolute;
+  top: 29%;
+  text-align: center;
+  left: 0;
+}
+
+.mooc-box h2 {
+  font-size: 36px;
+}
+
+.mooc-box h2 {
+  font-family: DIN-Bold1;
+}
+
+.mooc-box h2 {
+  width: 100%;
+  text-align: center;
+  color: #ffffff;
+  position: absolute;
+  top: 36%;
+  font-size: 48px;
+  font-weight: 400;
+  left: 0;
+}
+
+.mooc-box img {
+  width: 100%;
+  max-width: 1170px;
+  display: block;
+  margin: 0 auto;
+  vertical-align: middle;
+  border-radius: 4px;
+}

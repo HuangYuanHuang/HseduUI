@@ -1,7 +1,22 @@
 {
-    "chat":"chat",
-    "Input messages here, press Enter to send.":"Input messages here, press 'Enter' to send",
-    "Audio invitations":"Audio invitations from {{Name}}",
-    "Video invitations":"Video invitations from {{Name}}",
-    "There is no courseware sharing":"There is no courseware sharing,Please select the courseware you need to share from the left courseware list."
+  "chat": "chat",
+  "Features": "Features",
+  "Log in": "Log in",
+  "Free Trial": "Free Trial",
+  "Input messages here, press Enter to send.": "Input messages here, press 'Enter' to send",
+  "Audio invitations": "Audio invitations from {{Name}}",
+  "Video invitations": "Video invitations from {{Name}}",
+  "There is no courseware sharing": "There is no courseware sharing,Please select the courseware you need to share from the left courseware list.",
+  "Easy Efficient Beyond Expectations": "Easy . Efficient . Beyond Expectations",
+  "Everything You Need for Training Learning": "Everything You Need for Training Learning",
+  "Exclusive Domain": "Exclusive Domain",
+  "Course Production": "Course Production",
+  "Exercises Exams": "Exercises Exams",
+  "Statistic Report": "Statistic Report",
+  "One-to-One": "One-to-One",
+  "Access Allocation": "Access Allocation",
+  "Customization": "Customization",
+  "Learn more": "Learn more",
+  "Live Lecture": "Live Lecture",
+  "E-ducation Online Learning and Training Platform": "E-ducation Online Learning and Training Platform"
 }
