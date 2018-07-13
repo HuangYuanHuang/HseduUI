@@ -9,13 +9,13 @@
             <th scope="row">{{i+1}}</th>
             <td >{{item.fileName}}</td>
             <td style="text-align: left;width: 80px">
-              <button type="button" class="btn btn-sm btn-outline-success" (click)="item.fileDownload()">
+              <button type="button" class="btn btn-sm btn-outline-success" placement="top" ngbTooltip="{{'File download'|translate}}" (click)="item.fileDownload()">
                 <i class="fa fa-download fa-1x"></i>
               </button>
-              <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="item.canConvert" (click)="item.fileConvert()">
+              <button type="button" class="btn btn-sm btn-outline-primary" placement="top" ngbTooltip="{{'File convert'|translate}}" *ngIf="item.canConvert" (click)="item.fileConvert()">
                 <i class="fas fa-undo"></i>
               </button>
-              <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="item.canPlay" (click)="item.filePlay()">
+              <button type="button" class="btn btn-sm btn-outline-primary" placement="top" ngbTooltip="{{'File show'|translate}}" *ngIf="item.canPlay" (click)="item.filePlay()">
                 <i class="far fa-play-circle"></i>
               </button>
             </td>

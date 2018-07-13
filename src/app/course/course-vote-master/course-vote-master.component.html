@@ -9,7 +9,7 @@
           <th scope="col">{{'Permission'|translate}}</th>
           <th scope="col">{{'Students'|translate}}</th>
           <th scope="col">{{'Time'|translate}}</th>
-          <th scope="col">#</th>
+          <th scope="col">{{'Result'|translate}}</th>
         </tr>
       </thead>
 
@@ -31,7 +31,7 @@
           </td>
           <td>{{item.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
           <td>
-            <button type="button" class="btn btn-sm btn-outline-success" (click)="voteChartWindow(item,voteChartContent)">
+            <button type="button" class="btn btn-sm btn-outline-success" placement="top" ngbTooltip="{{'View the results'|translate}}" (click)="voteChartWindow(item,voteChartContent)">
               <i class="fas fa-chart-bar"></i>
             </button>
           </td>

@@ -2,5 +2,6 @@
     "chat":"chat",
     "Input messages here, press Enter to send.":"Input messages here, press 'Enter' to send",
     "Audio invitations":"Audio invitations from {{Name}}",
-    "Video invitations":"Video invitations from {{Name}}"
+    "Video invitations":"Video invitations from {{Name}}",
+    "There is no courseware sharing":"There is no courseware sharing,Please select the courseware you need to share from the left courseware list."
 }

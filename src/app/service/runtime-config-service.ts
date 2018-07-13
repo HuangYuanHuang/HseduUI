@@ -12,7 +12,7 @@ export class RuntimeConfigService {
     constructor(public translateService: TranslateService) {
         const params = new URLSearchParams(window.location.search.substring(1));
         this.courseId = decodeURIComponent(params.get('courseId') || 'course-v1:MIT+MIT045+2018_t6');
-        this.language = params.get('language') || 'en';
+        this.language = params.get('language') || 'zh';
         this.userName = params.get('userName') || 'UserName';
         this.courseName = decodeURIComponent(params.get('courseName') || 'Live Lecture');
         this.userId = parseInt(params.get('userId') || '7', 0);

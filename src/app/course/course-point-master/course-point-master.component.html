@@ -38,10 +38,10 @@
         </div>
       </div>
       <div style="text-align: center">
-        <button style="text-align: right" type="button" class="btn btn-sm btn-primary" (click)="openWindow(contentPoint,0)">
+        <button style="text-align: right" type="button" placement="top" ngbTooltip="{{'Play from start'|translate}}" class="btn btn-sm btn-primary" (click)="openWindow(contentPoint,0)">
           <i class="fas  fa-step-forward"></i>
         </button>
-        <button style="text-align: right" type="button" class="btn btn-sm btn-primary" (click)="openWindow(contentPoint,currentPoint.index)">
+        <button style="text-align: right" type="button" placement="top" ngbTooltip="{{'Play from current'|translate}}" class="btn btn-sm btn-primary" (click)="openWindow(contentPoint,currentPoint.index)">
           <i class="fas  fa-play"></i>
         </button>
       </div>

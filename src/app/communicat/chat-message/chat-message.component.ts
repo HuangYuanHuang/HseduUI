@@ -23,6 +23,7 @@ export class ChatMessageComponent implements OnInit {
       this.userNodes = [];
       nodes.forEach(d => this.userNodes.push(new UserModel(d.userId, d.userName, d.bio, d.imageUrlMedium,
         d.imageUrlFull, d.country, d.isOnline)));
+      this.setUser(this.userNodes[0]);
     });
     this.userContact.obEventNodes.subscribe(node => {
       const model = node as EventModel;

@@ -29,6 +29,7 @@ export class SearchComponent implements OnInit {
           total += item.num;
         });
         this.countryNodes.unshift(new Country('All Country', total, this.runConfig.userId, this.httpClient, this.userContact));
+        this.searchItem(this.countryNodes[0]);
       }
     });
   }

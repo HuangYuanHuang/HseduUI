@@ -7,7 +7,7 @@
           <th scope="col">{{'Title'|translate}}</th>
           <th scope="col">{{'State'|translate}}</th>
           <th scope="col">{{'Time'|translate}}</th>
-          <th scope="col">#</th>
+          <th scope="col">{{'Result'|translate}}</th>
         </tr>
       </thead>
 
@@ -16,16 +16,16 @@
           <th scope="row">{{i+1}}</th>
           <td style="width: 50%">{{item.title}}</td>
           <td>
-            <span *ngIf="item.userVoteStaus" class="badge badge-success">{{'finished '|translate}}</span>
+            <span *ngIf="item.userVoteStaus" class="badge badge-success">{{'finished'|translate}}</span>
             <span *ngIf="!item.userVoteStaus" class="badge badge-warning">{{'unfinished' | translate}}</span>
           </td>
 
           <td>{{item.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
           <td>
-            <button *ngIf="!item.userVoteStaus" type="button" class="btn btn-sm btn-outline-warning" (click)="voteView(item,voteViewContent)">
+            <button *ngIf="!item.userVoteStaus" type="button" placement="top" ngbTooltip="{{'Participation in voting'|translate}}" class="btn btn-sm btn-outline-warning" (click)="voteView(item,voteViewContent)">
               <i class="fas fa-eye"></i>
             </button>
-            <button *ngIf="item.userVoteStaus" type="button" class="btn btn-sm btn-outline-success" (click)="voteReadonly(item,votereadonlyContent)">
+            <button *ngIf="item.userVoteStaus" type="button" placement="top" ngbTooltip="{{'View the results'|translate}}" class="btn btn-sm btn-outline-success" (click)="voteReadonly(item,votereadonlyContent)">
               <i class="fas fa-street-view"></i>
             </button>
           </td>
