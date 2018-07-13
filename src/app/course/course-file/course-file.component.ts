@@ -79,6 +79,7 @@ export class CourseFileComponent implements OnInit {
 class CourseFileModel {
   private readonly downPath = '/coursefile/download?path=';
   public canConvert = false;
+  public convertDisabled = false;
   public canPlay = false;
   public imageNodes = [];
   public convertBtnReadonly = false;
@@ -101,9 +102,11 @@ class CourseFileModel {
   }
   fileConvert() {
     this.showProgress = true;
+
     this.progressValue = 1;
     this.pointService.convertFile(this.path, () => {
       console.log('File Is Convert Finished');
+      this.convertDisabled = true;
     });
 
   }
@@ -118,6 +121,7 @@ class CourseFileModel {
         this.showProgress = false;
         this.trClass = 'table-danger';
         this.progressValue = 0;
+        this.convertDisabled = false;
       }, 1000);
       return;
     }
@@ -129,6 +133,7 @@ class CourseFileModel {
       this.showProgress = false;
       this.trClass = 'table-success';
       this.progressValue = 0;
+      this.convertDisabled = false;
     }, 1000);
   }
   fileDownload() {
