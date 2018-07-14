@@ -1,7 +1,10 @@
 <div class="video-master">
   <div class="card border-primary mb-3">
-    <div class="card-body text-primary text-center">
+    <div class="card-body text-primary text-center" *ngIf="videoId">
       <div id="{{videoId}}" style="height: 240px;"></div>
+    </div>
+    <div class="card-body text-primary text-center" *ngIf="!videoId" style="background: white;height: 240px;">
+      <h5 style="margin-top: 100px">{{'The teacher has not yet joined' | translate}}</h5>
     </div>
   </div>
 </div>
