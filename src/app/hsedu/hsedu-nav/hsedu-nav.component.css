@@ -1,6 +1,20 @@
-.form-inline{
-    margin-left: 10px;
+.form-inline {
+  margin-left: 10px;
 }
-.form-inline button{
-    margin-left: 10px;
+
+.form-inline button {
+  margin-left: 10px;
+}
+
+.navbar {
+  background: #fff;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 9999999999 !important;
+  border-bottom: 3px solid #0692E1;
+  font-size: 16px;
+  height: 60px;
+  font-weight: normal;
 }

@@ -12,7 +12,8 @@ import { TranslateModule } from '@ngx-translate/core';
 import { HseduFooterComponent } from './hsedu-footer/hsedu-footer.component';
 import { HseduFeatureComponent } from './hsedu-feature/hsedu-feature.component';
 const appRoutes: Routes = [
-  { path: '', component: HseduHomeComponent },
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HseduHomeComponent },
   { path: 'course-list', component: HseduCourseListComponent },
   { path: 'feature', component: HseduFeatureComponent }
 ];
