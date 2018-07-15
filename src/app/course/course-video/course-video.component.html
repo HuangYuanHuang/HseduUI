@@ -3,23 +3,23 @@
     <div class="card-body text-primary text-center" style="padding:0.25rem">
 
       <div id="video-person-card">
-        <h3 style="padding-top: 100px" *ngIf="!videoNodes">{{'No students are in the classroom'|translate}}</h3>
+        <h3 style="padding-top: 50px" *ngIf="videoNodes.length<=0">{{'No students are in the classroom'|translate}}</h3>
 
-        <div class="video-play" *ngFor="let item of videoNodes" id="{{item.getStreamId()}}" #p="ngbPopover" (click)="itemPover(item,p)" [ngbPopover]="popContent" triggers="manual"  placement="left" popoverTitle="{{'Information'|translate}}">
-       
+        <div class="video-play" *ngFor="let item of videoNodes" id="{{item.getStreamId()}}">
+          <div class="popver-div" *ngIf="item.userDetail">
+            <h6 style="text-align: right;color: white">
+              <span class="badge badge-secondary">{{item.userDetail.userName}}</span>
+            </h6>
+            <div class="video-opera-popber" style="padding-top: 10px;display: none">
+              <button type="button" class="btn btn-sm " (click)="playVideo(item)" [ngClass]="item.videoBtnClass">
+                <i class="fas fa-1x " [ngClass]="item.videoIonClass"></i>
+              </button>
+              <button type="button" class="btn btn-sm " (click)="playAudio(item)" [ngClass]="item.audioBtnClass">
+                <i class="fas fa-1x " [ngClass]="item.audioIonClass"></i>
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
-</div>
-
-<ng-template #popContent let-greeting="greeting">
-  <div>
-    <p><strong>{{currentPoper.user.userName}}</strong></p>
-      <button type="button" class="btn btn-sm " (click)="currentPoper.node.playVideo()" [ngClass]="currentPoper.node.videoBtnClass">
-          <i class="fas fa-1x " [ngClass]="currentPoper.node.videoIonClass"></i>
-        </button>
-        <button type="button" class="btn btn-sm " (click)="currentPoper.node.playAudio()" [ngClass]="currentPoper.node.audioBtnClass">
-          <i class="fas fa-1x " [ngClass]="currentPoper.node.audioIonClass"></i>
-        </button>
-  </div>
-  </ng-template>

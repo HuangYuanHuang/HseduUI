@@ -20,12 +20,13 @@ import { SignalrChatService } from '../service/signalr-chat-service';
 import { CourseOnlineComponent } from './course-online/course-online.component';
 import { CoursePointMasterComponent } from './course-point-master/course-point-master.component';
 import { CoursePointComponent } from './course-point/course-point.component';
-
+import { CourseNavigateComponent } from './course-navigate/course-navigate.component';
 import { FilterPipe } from '../pipe/filter.pipe';
 import { NgxEchartsModule } from 'ngx-echarts';
 
 const appRoutes: Routes = [
   { path: 'course', component: CourseHomeComponent },
+  { path: 'navigate', component: CourseNavigateComponent },
   { path: 'course-master', component: CourseHomeMasterComponent }
 ];
 @NgModule({
@@ -50,7 +51,8 @@ const appRoutes: Routes = [
     CourseBoardComponent,
     CourseOnlineComponent,
     CoursePointMasterComponent,
-    CoursePointComponent
+    CoursePointComponent,
+    CourseNavigateComponent
   ]
 })
 export class CourseModule { }

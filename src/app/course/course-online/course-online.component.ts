@@ -39,6 +39,7 @@ export class CourseOnlineComponent implements OnInit {
             userDetail.status = resUserRequest[0].status;
           }
         });
+        console.log('online num');
         $('#onlineNum').text(subject.data.length);
       }
 

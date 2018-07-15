@@ -16,6 +16,9 @@ export class RuntimeConfigService {
         this.userName = params.get('userName') || 'UserName';
         this.courseName = decodeURIComponent(params.get('courseName') || 'Live Lecture');
         this.userId = parseInt(params.get('userId') || '7', 0);
+        if (params.get('isTeacher')) {
+            this.isTeacher = params.get('isTeacher').toUpperCase() === 'TRUE';
+        }
         this.toString();
         if (this.language.indexOf('zh') !== -1) {
             this.translateService.use('zh');

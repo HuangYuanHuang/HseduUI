@@ -13,7 +13,7 @@
 <div>
   <form>
     <div class="form-group">
-      <textarea name="message" class="form-control" [(ngModel)]="messageContext" (keyup.enter)="sendMessage()" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}" rows="2"></textarea>
+      <textarea name="message" style="resize: none;" class="form-control" [(ngModel)]="messageContext" (keyup.enter)="sendMessage()" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}" rows="2"></textarea>
     </div>
   </form>
 </div>

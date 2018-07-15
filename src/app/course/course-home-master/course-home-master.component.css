@@ -1,24 +1,24 @@
-.shard{
-    height: 580px;
-}
-.awwboard{
-    height: 510px;
-
+.shard {
+  height: 580px;
+  margin-top: 40px;
 }
 
-.tab-context{
-    height: 520px;
-    margin-top: 5px;   
+.awwboard {
+  height: 510px;
 }
-.card-body{
-    padding: 0.25rem !important;
+
+.tab-context {
+  height: 520px;
+  margin-top: 5px;
 }
-.div-button button{
-    width: 40px;
+
+.div-button button {
+  width: 40px;
 }
-.container-fluid{
-    padding-top: 2px;
-    padding-left: 2px;
-    padding-right: 0px;
-    overflow-x: hidden;
+
+.container-fluid {
+  padding-top: 2px;
+  padding-left: 2px;
+  padding-right: 0px;
+  overflow-x: hidden;
 }

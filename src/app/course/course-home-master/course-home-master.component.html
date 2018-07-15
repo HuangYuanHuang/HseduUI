@@ -47,8 +47,29 @@
           </div>
         </div>
         <div class="col-8">
+          <div class="text-muted">
+            <div style="text-align: center;margin-bottom: 20px;" class="div-button" >
+              <div *ngIf="localVideoNode">
+
+
+                <button type="button" class="btn btn-sm " (click)="localVideoNode.playVideo()" [ngClass]="localVideoNode.videoBtnClass">
+                  <i class="fas fa-1x " [ngClass]="localVideoNode.videoIonClass"></i>
+                </button>
+                <button type="button" class="btn btn-sm " (click)="localVideoNode.playAudio()" [ngClass]="localVideoNode.audioBtnClass">
+                  <i class="fas fa-1x " [ngClass]="localVideoNode.audioIonClass"></i>
+                </button>
+
+
+                <!-- <button type="button" class="btn btn-sm btn-danger" (click)="streamClose()">
+                  <i class="fas fa-ban"></i>
+                </button> -->
+              </div>
+            </div>
+
+
+          </div>
           <div class="video-person">
-            <app-course-video></app-course-video>
+            <app-course-video [videoOpera]="true"></app-course-video>
           </div>
           <div class="shard">
             <nav>
@@ -89,24 +110,7 @@
       </div>
 
     </div>
-    <div class="card-footer text-muted">
-      <div style="text-align: center" class="div-button" *ngIf="localVideoNode">
 
-        <button type="button" class="btn btn-sm " (click)="localVideoNode.playVideo()" [ngClass]="localVideoNode.videoBtnClass">
-          <i class="fas fa-1x " [ngClass]="localVideoNode.videoIonClass"></i>
-        </button>
-        <button type="button" class="btn btn-sm " (click)="localVideoNode.playAudio()" [ngClass]="localVideoNode.audioBtnClass">
-          <i class="fas fa-1x " [ngClass]="localVideoNode.audioIonClass"></i>
-        </button>
-
-
-        <button type="button" class="btn btn-sm btn-danger" (click)="streamClose()">
-          <i class="fas fa-ban"></i>
-        </button>
-      </div>
-
-
-    </div>
   </div>
 
 

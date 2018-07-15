@@ -92,6 +92,7 @@ export class AgoraServiceService {
 }
 
 export class AgoraVideoNode {
+  public userDetail: any;
   public isPlayVideo = true;
   public isPlayAudio = true;
   public videoBtnClass = 'btn-primary';

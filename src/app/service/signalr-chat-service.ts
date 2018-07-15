@@ -5,7 +5,7 @@ import { RuntimeConfigService } from './runtime-config-service';
 @Injectable()
 export class SignalrChatService {
 
-    private subjectReal = new Subject<RealModel>();
+    public subjectReal = new Subject<RealModel>();
     public obRealNodes;
     private connection;
     constructor(private runConfig: RuntimeConfigService) {
@@ -22,12 +22,15 @@ export class SignalrChatService {
             this.connection.on('getMessage', (nodes) => {
                 const messgaes = [];
                 nodes.forEach(item => {
-                    messgaes.push(new MessageNode(item.userName, item.messageContext));
+                    messgaes.push(new MessageNode(item.userName, item.messageContext, item.messageType));
                 });
                 this.subjectReal.next(new RealModel(ReceiveStausEnum.Message, messgaes));
             });
             this.connection.on('getOnlineNum', (users) => {
                 this.subjectReal.next(new RealModel(ReceiveStausEnum.OnlineNum, users));
+            });
+            this.connection.on('getMediaOpera', (toUserId, type) => {
+                this.subjectReal.next(new RealModel(type, toUserId));
             });
             setTimeout(() => {
                 this.connection.invoke('getGroupMessage').then(d => {
@@ -38,14 +41,21 @@ export class SignalrChatService {
         });
     }
     sendMessage(message: string, callback) {
-        this.connection.invoke('SendMessage', message).then(d => {
+        this.connection.invoke('SendMessage', message, ReceiveStausEnum.Message).then(d => {
+            callback();
+        }).catch(err => console.error);
+    }
+    sendMediaOpera(toUserId: number, type: ReceiveStausEnum, callback) {
+        this.connection.invoke('SendMediaOpera', toUserId, type).then(d => {
             callback();
         }).catch(err => console.error);
     }
 }
 export enum ReceiveStausEnum {
     Message,
-    OnlineNum
+    OnlineNum,
+    VideoOpera,
+    AudioOpera
 }
 
 export class RealModel {
@@ -55,7 +65,7 @@ export class RealModel {
 }
 
 export class MessageNode {
-    constructor(public userName: string, public message: string) {
+    constructor(public userName: string, public message: string, public messageType: ReceiveStausEnum) {
     }
 }
 

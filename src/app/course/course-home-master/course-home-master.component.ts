@@ -1,8 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AgoraServiceService, AgoraVideoNode, SubjectVideo, AgoraEnum } from '../../service/agora-service.service';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
-
-import { Subject } from 'rxjs/Subject';
 @Component({
   selector: 'app-course-home-master',
   templateUrl: './course-home-master.component.html',

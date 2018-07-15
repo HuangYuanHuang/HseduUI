@@ -1,5 +1,6 @@
 .shard{
     height: 580px;
+    margin-top: 40px;
 }
 .awwboard{
     height: 510px;
@@ -10,9 +11,7 @@
     height: 520px;
     margin-top: 5px;
 }
-.card-body{
-    padding: 0.25rem !important;
-}
+
 .div-button button{
     width: 40px;
 }
