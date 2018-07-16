@@ -51,10 +51,10 @@
 
                 <div style="text-align: center" class="div-button" *ngIf="localVideoNode">
           
-                  <button type="button" class="btn btn-sm " (click)="localVideoNode.playVideo()" [ngClass]="localVideoNode.videoBtnClass">
+                  <button type="button" class="btn btn-sm "  (click)="playVideo(localVideoNode)" [ngClass]="localVideoNode.videoBtnClass">
                     <i class="fas fa-1x " [ngClass]="localVideoNode.videoIonClass"></i>
                   </button>
-                  <button type="button" class="btn btn-sm " (click)="localVideoNode.playAudio()" [ngClass]="localVideoNode.audioBtnClass">
+                  <button type="button" class="btn btn-sm " (click)="playAudio(localVideoNode)" [ngClass]="localVideoNode.audioBtnClass">
                     <i class="fas fa-1x " [ngClass]="localVideoNode.audioIonClass"></i>
                   </button>
                   <!-- <button type="button" class="btn btn-sm btn-danger" (click)="streamClose()">

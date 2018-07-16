@@ -12,7 +12,7 @@
               <strong>{{item.userDetail.userName}}</strong>
             </h5>
             <p *ngIf="item.type==1" class="text">{{item.text}}</p>
-            <p *ngIf="item.type>1" class="text" style="color: red"><i [class]="item.text"></i></p>
+            <p *ngIf="item.type>1" class="text" style="color: red"><i [ngClass]="item.text"></i></p>
           </div>
         </td>
         <td style="padding: 0px;vertical-align:middle" class="opera-btn">

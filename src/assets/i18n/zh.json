@@ -127,5 +127,7 @@
   "Audio call": "音频通话",
   "Video call": "视频通话",
   "Media invitation": "在线通话邀请",
-  "Send Message":"发消息"
+  "Send Message":"发消息",
+  "In the call":"通话中",
+  "Exit":"退出"
 }

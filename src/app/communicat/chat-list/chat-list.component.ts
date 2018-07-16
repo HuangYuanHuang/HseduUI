@@ -25,17 +25,22 @@ export class ChatListComponent implements OnInit {
         }
         if (model.type === EventType.ChatInfo) {
           this.userContact.sendEvent(EventType.OpenChat, info);
-        } else {
-          this.userContact.sendEvent(model.type, info);
+        } else if (model.type === EventType.ChatVideo) {
+          this.userContact.sendEvent(EventType.OpenVideo, info);
+        } else if (model.type === EventType.ChatAudio) {
+          this.userContact.sendEvent(EventType.OpenAudio, info);
         }
 
       } else if (model.type === EventType.ChatMessage) {
         const newMessage = model.data;
         const res = this.chatNodes.filter(d => d.userDetail.userId === newMessage.userId || d.userDetail.userId === newMessage.toUserId);
         if (res && res.length > 0) {
-          res[0].text = newMessage.text;
-          res[0].time = newMessage.creationTime;
-          res[0].type = newMessage.messageType;
+          setTimeout(() => {
+            res[0].text = newMessage.text;
+            res[0].time = newMessage.creationTime;
+            res[0].type = newMessage.messageType;
+          }, 10);
+
         } else {
           this.getUserInfoById(newMessage.userId, newMessage.text);
         }

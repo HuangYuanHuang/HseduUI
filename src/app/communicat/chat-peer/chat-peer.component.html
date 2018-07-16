@@ -15,9 +15,9 @@
           </p>
           <div class="main " [ngClass]="item.getSelfActive(runConfig)">
             <img class="avatar" [src]="item.getUserInfo(userContact).imageUrlMedium" width="30" height="30">
-            <div *ngIf="item.messageType==1" class="text">{{item.text}}</div>
+            <div *ngIf="item.messageType<=1" class="text">{{item.text}}</div>
             <div *ngIf="item.messageType>1" class="text">
-              <i [class]="item.text" style="color: red"></i> &nbsp;&nbsp;
+              <i [ngClass]="item.text" style="color: red"></i> &nbsp;&nbsp;
             </div>
 
           </div>
@@ -31,10 +31,10 @@
         <button type="button" class="btn btn-light btn-sm" placement="top" ngbTooltip="{{'Chat history'|translate}}" (click)="openMessage()">
           <i class="fas fa-comment-alt"></i>
         </button>
-        <button type="button" class="btn btn-light btn-sm" placement="top" ngbTooltip="{{'Audio call'|translate}}" (click)="linkInfo('audio')">
+        <button type="button" class="btn btn-light btn-sm opera-btn" placement="top" ngbTooltip="{{'Audio call'|translate}}" (click)="linkInfo('audio')">
           <i class="fas fa-microphone"></i>
         </button>
-        <button type="button" class="btn btn-light btn-sm" placement="top" ngbTooltip="{{'Video call'|translate}}" (click)="linkInfo('video')">
+        <button type="button" class="btn btn-light btn-sm opera-btn" placement="top" ngbTooltip="{{'Video call'|translate}}" (click)="linkInfo('video')">
           <i class="fas fa-video"></i>
         </button>
       </div>
@@ -68,7 +68,7 @@
       {{'Accept'|translate}}
     </button>
 
-    <button type="button" class="btn btn-danger" (click)="closeInfo('refuse')">
+    <button type="button" class="btn btn-danger" (click)="refuse()">
       {{'Refuse'|translate}}
     </button>
   </div>

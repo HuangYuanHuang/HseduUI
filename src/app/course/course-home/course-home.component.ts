@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AgoraServiceService, SubjectVideo, AgoraVideoNode, AgoraEnum } from '../../service/agora-service.service';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
+import { SignalrChatService, RealModel, ReceiveStausEnum } from '../../service/signalr-chat-service';
+
 @Component({
   selector: 'app-course-home',
   templateUrl: './course-home.component.html',
@@ -13,7 +15,7 @@ export class CourseHomeComponent implements OnInit {
   userName;
   courseName;
   isTeacher = false;
-  constructor(private agora: AgoraServiceService, private runConfig: RuntimeConfigService) {
+  constructor(private agora: AgoraServiceService, private runConfig: RuntimeConfigService, private signalr: SignalrChatService) {
     this.courseId = runConfig.courseId;
     this.userId = runConfig.userId;
     this.userName = runConfig.userName;
@@ -31,6 +33,17 @@ export class CourseHomeComponent implements OnInit {
     this.localVideoNode.stop();
     $('.div-button button').attr('disabled', 'disabled');
     this.agora.subjectVideo.next(new SubjectVideo(this.localVideoNode, AgoraEnum.DisConnect, this.isTeacher, true, false));
+  }
+
+  playVideo(item: AgoraVideoNode) {
+    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.VideoOpera, () => {
+   //   item.playVideo();
+    });
+  }
+  playAudio(item: AgoraVideoNode) {
+    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.AudioOpera, () => {
+  //    item.playAudio();
+    });
   }
   ngOnInit() {
   }

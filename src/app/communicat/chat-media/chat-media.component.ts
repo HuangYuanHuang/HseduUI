@@ -39,16 +39,10 @@ export class ChatMediaComponent implements OnInit, OnChanges {
         case MessageTypeEnum.Audio:
           this.chatStatus = ChatStautsEnum.Confirm;
           this.mediaMessage = { channel: model.message, audio: true, video: false };
-          $('#chat-main').width($('.chat-peer').width() * 0.7);
-          $('#media-main').width($('.chat-peer').width() * 0.3);
-          $('#media-main').show();
           break;
         case MessageTypeEnum.Video:
           this.chatStatus = ChatStautsEnum.Confirm;
           this.mediaMessage = { channel: model.message, audio: true, video: true };
-          $('#chat-main').width($('.chat-peer').width() * 0.7);
-          $('#media-main').width($('.chat-peer').width() * 0.3);
-          $('#media-main').show();
           break;
         case MessageTypeEnum.Accept:
           this.chatStatus = ChatStautsEnum.Accept;
@@ -65,6 +59,12 @@ export class ChatMediaComponent implements OnInit, OnChanges {
   }
   ngOnInit() {
     this.isLoad = true;
+    $('.sidebar-right').on('mouseover', 'div[id="media-call"]', function () {
+      $('#footer-opera', this).show();
+    });
+    $('.sidebar-right').on('mouseout', 'div[id="media-call"]', function () {
+      $('#footer-opera', this).hide();
+    });
   }
   initAgora() {
     this.agora.changeVideOb.subscribe(node => {
@@ -74,21 +74,10 @@ export class ChatMediaComponent implements OnInit, OnChanges {
         subject.videNode.play();
       } else if (!subject.is_local && subject.aogra === AgoraEnum.Connect && subject.is_peer) {
         this.remoteVideoNode = subject.videNode;
+        this.chatStatus = ChatStautsEnum.Accept;
         this.remoteVideoNode.play();
       }
     });
-  }
-  join() {
-    this.sendMessage.emit({
-      channel: 'Accept',
-      type: MessageTypeEnum.Accept,
-      callBack: () => {
-        this.chatStatus = ChatStautsEnum.Accept;
-        this.agora.agoraInit(this.runConfig.userId, this.mediaMessage.channel, this.mediaMessage.audio, this.mediaMessage.video, false, true);
-        $('.opera-btn').hide();
-      }
-    });
-
   }
   linkInfo(type: string) {
     const timeSpan = new Date().getHours() + new Date().getMilliseconds() + new Date().getSeconds();
@@ -122,7 +111,6 @@ export class ChatMediaComponent implements OnInit, OnChanges {
           this.localVideoNode.stop();
         }
       });
-
     }
     $('#chat-main').width($('.chat-peer').width());
     $('#media-main').width($('.chat-peer').width() * 0.3);
