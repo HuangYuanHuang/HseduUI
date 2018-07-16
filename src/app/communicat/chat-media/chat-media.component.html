@@ -4,14 +4,15 @@
     <div class="media-main">
       <div class="video-play" *ngIf="localVideoNode" id="{{localVideoNode.getStreamId()}}">
       </div>
-    </div>
-    <div class="footer">
-      <p>{{'Wait for the other party to accept the invitation'| translate}}</p>
-      <div class="footer-button">
-        <button type="button" class="btn btn-danger" (click)="closeStream()">{{'Close'|translate}} </button>
+      <div class="footer">
+        <p>{{'Wait for the other party to accept the invitation'| translate}}</p>
+        <div class="footer-button">
+          <button type="button" class="btn btn-danger" (click)="closeStream()">{{'Close'|translate}} </button>
 
+        </div>
       </div>
     </div>
+
   </div>
 
   <div class="media-info" *ngIf="chatStatus==1">

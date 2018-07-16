@@ -27,6 +27,7 @@ export class ChatMediaComponent implements OnInit, OnChanges {
       return;
     }
     if (changes['mediaModel']) {
+      console.log(this.mediaModel);
       this.linkInfo(this.mediaModel.type);
     }
   }
@@ -116,7 +117,12 @@ export class ChatMediaComponent implements OnInit, OnChanges {
   }
   closeStream() {
     if (this.localVideoNode) {
-      this.localVideoNode.stop();
+      this.sendMessage.emit({
+        channel: 'Close', type: MessageTypeEnum.Close, callBack: () => {
+          this.localVideoNode.stop();
+        }
+      });
+
     }
     $('#chat-main').width($('.chat-peer').width());
     $('#media-main').width($('.chat-peer').width() * 0.3);

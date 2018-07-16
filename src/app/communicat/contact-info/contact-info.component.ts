@@ -18,11 +18,18 @@ export class ContactInfoComponent implements OnInit {
     });
 
   }
-
   ngOnInit() {
   }
   sendMessage() {
     this.userContact.sendEvent(EventType.ChatInfo, this.userInfo);
+    $('#pills-chat-tab').trigger('click');
+  }
+  sendAudio() {
+    this.userContact.sendEvent(EventType.ChatAudio, this.userInfo);
+    $('#pills-chat-tab').trigger('click');
+  }
+  sendVideo() {
+    this.userContact.sendEvent(EventType.ChatVideo, this.userInfo);
     $('#pills-chat-tab').trigger('click');
   }
 }

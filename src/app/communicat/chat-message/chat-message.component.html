@@ -30,7 +30,7 @@
           <tr *ngFor="let item of messageNodes">
 
             <td>
-              <div>
+              <div *ngIf="item.userInfo">
                 <p class="user-p" [ngClass]="item.color"><strong>{{item.userInfo.userName}}</strong> &nbsp;&nbsp; {{item.time| date: 'MM-dd HH:mm:ss'}}</p>
                 <p class="user-text">{{item.text}}</p>
               </div>

@@ -24,15 +24,17 @@ export class CourseNavigateComponent implements OnInit {
           }
 
         });
-        if (this.teacherNum === 1) {
-          this.router.navigateByUrl('/course-master').then(f => {
+        const parms = window.location.search;
+        if (this.teacherNum <= 1) {
+
+          this.router.navigateByUrl('/course-master' + parms).then(f => {
             this.isFirst = false;
             setTimeout(() => {
               this.signalr.subjectReal.next(new RealModel(ReceiveStausEnum.OnlineNum, node.data));
             }, 100);
           });
         } else {
-          this.router.navigateByUrl('/course').then(f => {
+          this.router.navigateByUrl('/course' + parms).then(f => {
             this.isFirst = false;
             setTimeout(() => {
               this.signalr.subjectReal.next(new RealModel(ReceiveStausEnum.OnlineNum, node.data));

@@ -27,11 +27,7 @@ export class AgoraServiceService {
       this.client.join(null, courseId, stream, (uid) => {
         console.log('User ' + uid + ' join channel successfully');
         this.localStream = AgoraRTC.createStream({ streamID: uid, audio: audio, video: video, screen: false });
-        if (is_teacher) {
-          this.localStream.setVideoProfile('360P');
-        } else {
-          this.localStream.setVideoProfile('240P_4');
-        }
+        this.localStream.setVideoProfile('240P');
         this.localStream.init(() => {
           console.log('localStram init');
           const videoNode = new AgoraVideoNode(this.localStream);

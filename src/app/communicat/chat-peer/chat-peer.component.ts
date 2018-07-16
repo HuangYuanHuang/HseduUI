@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
 import { SignalrOnlineChatService, OnlineMessageNode, MessageTypeEnum } from '../../service/signalr-online-chat-service';
 import { HttpClient } from '@angular/common/http';
 import { CourseConfig } from '../../../shard/CourseConfig';
 import { UserContactService, UserModel, EventModel, EventType } from '../../service/user-contact-service';
+import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-chat-peer',
@@ -15,17 +16,31 @@ export class ChatPeerComponent implements OnInit {
   userMessageMap = new Map<number, MessageModel>();
   currentChatModel = { user: null, nodes: [], text: '' };
   mediaModel = { user: null, type: '' };
+  modalResult;
+  @ViewChild('content') modalContext: ElementRef;
+
   constructor(private runConfig: RuntimeConfigService,
     private onlineChatService: SignalrOnlineChatService,
-    private http: HttpClient, private userContact: UserContactService) {
+    private http: HttpClient, private userContact: UserContactService, private modalService: NgbModal) {
     this.userContact.obEventNodes.subscribe(data => {
       const model = data as EventModel;
-      if (model.type === EventType.OpenChat) {
+      if (model.type === EventType.OpenChat || model.type === EventType.ChatVideo || model.type === EventType.ChatAudio) {
         this.currentChatModel.user = model.data;
         if (!this.userMessageMap.has(model.data.userId)) {
           this.userMessageMap.set(model.data.userId, new MessageModel(null, false, []));
         }
         this.loadMessage(model.data, this.userMessageMap.get(model.data.userId));
+        if (model.type === EventType.ChatVideo) {
+          setTimeout(() => {
+            this.linkInfo('video');
+          }, 1000);
+
+        } else if (model.type === EventType.ChatAudio) {
+          setTimeout(() => {
+            this.linkInfo('audio');
+          }, 1000);
+
+        }
       } else if (model.type === EventType.RemoveUser) {
         this.userMessageMap.delete(model.data.userDetail.userId);
         if (this.userMessageMap.size === 0) {
@@ -88,8 +103,10 @@ export class ChatPeerComponent implements OnInit {
   }
   postMesssage(message: string, type: MessageTypeEnum, callBack) {
     const chat = new ChatNode(message, this.runConfig.userId, this.currentChatModel.user.userId, type, new Date());
-    if (type !== MessageTypeEnum.Text) {
-      chat.text = 'Media Call';
+    if (type === MessageTypeEnum.Video) {
+      chat.text = 'fas fa-video';
+    } else if (type === MessageTypeEnum.Audio) {
+      chat.text = 'fas fa-microphone';
     }
     this.currentChatModel.nodes.push(chat);
     this.userContact.sendEvent(EventType.ChatMessage, chat);
@@ -128,18 +145,35 @@ export class ChatPeerComponent implements OnInit {
       }
     });
   }
+  initMediaMessage(text: string, model: OnlineMessageNode, type: string) {
+    this.userContact.sendEvent(EventType.ChatMessage, new ChatNode(text, model.fromUserId, model.toUserId,
+      model.messageType, model.creationTime));
+    this.mediaModel.user = this.userContact.getUserInfoFromCache(model.fromUserId);
+    if (this.mediaModel.user === null) {
+      this.userContact.getUserInfoFromHttp(model.fromUserId, (d) => {
+        this.mediaModel.type = type;
+        this.mediaModel.user = d;
+        this.modalResult = this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+      });
+    } else {
+      this.mediaModel.type = type;
+      this.modalResult = this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+    }
+
+  }
   initGetChatMessage() {
     this.onlineChatService.obMessageNodes.subscribe(node => {
       const model = node as OnlineMessageNode;
 
       switch (model.messageType) {
         case MessageTypeEnum.Audio:
-          this.userContact.sendEvent(EventType.ChatMessage, new ChatNode('Audio invitations', model.fromUserId, model.toUserId,
-            model.messageType, model.creationTime));
+          this.initMediaMessage('Audio invitations', model, 'audio');
           break;
         case MessageTypeEnum.Video:
-          this.userContact.sendEvent(EventType.ChatMessage, new ChatNode('Video invitations', model.fromUserId, model.toUserId,
-            model.messageType, model.creationTime));
+          this.initMediaMessage('Video invitations', model, 'video');
+          break;
+        case MessageTypeEnum.Close:
+          this.modalResult.close();
           break;
         case MessageTypeEnum.Text:
           const chat = new ChatNode(model.message, model.fromUserId, model.toUserId,

@@ -1,15 +1,13 @@
 .m-message {
     padding: 10px 15px;
     overflow-y: scroll;
-    
     li {
         margin-bottom: 15px;
     }
     .time {
         margin: 7px 0;
         text-align: center;
-        
-        > span {
+        >span {
             display: inline-block;
             padding: 0 18px;
             font-size: 12px;
@@ -35,7 +33,6 @@
         word-break: break-all;
         background-color: #fafafa;
         border-radius: 4px;
-        
         &:before {
             content: " ";
             position: absolute;
@@ -45,17 +42,14 @@
             border-right-color: #fafafa;
         }
     }
-    
     .self {
         text-align: right;
-        
         .avatar {
             float: right;
             margin: 0 0 0 10px;
         }
         .text {
             background-color: #b2e281;
-            
             &:before {
                 right: inherit;
                 left: 100%;
@@ -69,19 +63,23 @@
         padding-left: 0px;
     }
 }
+
 .m-message {
     border-top: solid 1px #ddd;
     height: 450px;
 }
-.m-header{
-    background: white;  
+
+.m-header {
+    background: white;
     height: 40px;
 }
-.m-header h5{
-   padding-top: 5px;
-   padding-left: 10px;
-   text-align: left;
+
+.m-header h5 {
+    padding-top: 5px;
+    padding-left: 10px;
+    text-align: left;
 }
+
 .m-text {
     height: 160px;
     border-top: solid 1px #ddd;
@@ -98,17 +96,27 @@
     }
 }
 
-.opera-btn{
+.opera-btn {
     height: 30px;
     padding-top: 5px;
     background: white;
     text-align: right;
 }
-#chat-main{
+
+#chat-main {
     float: left;
     width: 100%;
 }
-.media-main{
+
+.media-main {
     float: left;
     width: 30%;
+}
+
+.media-position {
+    position: absolute;
+    width: 320px;
+    height: 240px;
+    top: 120px;
+    z-index: 4;
 }

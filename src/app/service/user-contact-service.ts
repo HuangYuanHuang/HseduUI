@@ -84,7 +84,9 @@ export enum EventType {
     RemoveUser,
     UserApply,
     UserRequest,
-    MessageHis
+    MessageHis,
+    ChatVideo,
+    ChatAudio
 }
 export class EventModel {
     constructor(public type: EventType, public data: any) {

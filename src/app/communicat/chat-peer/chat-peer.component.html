@@ -4,19 +4,6 @@
       <div style="float: left;">
         <h5 *ngIf="currentChatModel.user">{{currentChatModel.user.userName}}</h5>
       </div>
-
-      <div class="opera-btn">
-        <div>
-          <button type="button" class="btn btn-light btn-sm" (click)="linkInfo('audio')">
-            <i class="fas fa-microphone"></i>
-          </button>
-          <button type="button" class="btn btn-light btn-sm" (click)="linkInfo('video')">
-            <i class="fas fa-video"></i>
-          </button>
-        </div>
-
-
-      </div>
     </div>
     <div class="m-message" id="m-message">
 
@@ -28,19 +15,29 @@
           </p>
           <div class="main " [ngClass]="item.getSelfActive(runConfig)">
             <img class="avatar" [src]="item.getUserInfo(userContact).imageUrlMedium" width="30" height="30">
-            <div class="text">{{item.text}}</div>
+            <div *ngIf="item.messageType==1" class="text">{{item.text}}</div>
+            <div *ngIf="item.messageType>1" class="text">
+              <i [class]="item.text" style="color: red"></i> &nbsp;&nbsp;
+            </div>
+
           </div>
         </li>
         <!--v-for-end-->
       </ul>
-
     </div>
     <!--v-component-->
-    <div style="text-align: right;">
-      <button type="button" class="btn btn-light btn-sm" (click)="openMessage()">
+    <div>
+      <div style="text-align: right">
+        <button type="button" class="btn btn-light btn-sm" placement="top" ngbTooltip="{{'Chat history'|translate}}" (click)="openMessage()">
           <i class="fas fa-comment-alt"></i>
-      </button>
-    
+        </button>
+        <button type="button" class="btn btn-light btn-sm" placement="top" ngbTooltip="{{'Audio call'|translate}}" (click)="linkInfo('audio')">
+          <i class="fas fa-microphone"></i>
+        </button>
+        <button type="button" class="btn btn-light btn-sm" placement="top" ngbTooltip="{{'Video call'|translate}}" (click)="linkInfo('video')">
+          <i class="fas fa-video"></i>
+        </button>
+      </div>
     </div>
     <div class="m-text">
       <textarea name="messageContext" [(ngModel)]="currentChatModel.text" (keyup.enter)="sendMessage()" placeholder="{{ 'Input messages here, press Enter to send.'| translate}}"></textarea>
@@ -56,3 +53,23 @@
     {{'The message list is empty' |translate}}
   </p>
 </div>
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{'Media invitation'|translate}}</h4>
+   
+  </div>
+  <div class="modal-body">
+    <p *ngIf="mediaModel.type=='video'">{{'Video invitations'| translate:{Name:mediaModel.user.userName} }}</p>
+    <p *ngIf="mediaModel.type=='audio'">{{'Audio invitations'| translate:{Name:mediaModel.user.userName} }}</p>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="join()">
+      {{'Accept'|translate}}
+    </button>
+
+    <button type="button" class="btn btn-danger" (click)="closeInfo('refuse')">
+      {{'Refuse'|translate}}
+    </button>
+  </div>
+</ng-template>

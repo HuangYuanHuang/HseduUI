@@ -11,7 +11,7 @@ export class ChatListComponent implements OnInit {
   constructor(private userContact: UserContactService) {
     this.userContact.obEventNodes.subscribe(data => {
       const model = data as EventModel;
-      if (model.type === EventType.ChatInfo) {
+      if (model.type === EventType.ChatInfo || model.type === EventType.ChatVideo || model.type === EventType.ChatAudio) {
         const info = model.data;
         const res = this.chatNodes.filter(d => d.userDetail.userId === info.userId);
         this.chatNodes.forEach(d => d.active = '');
@@ -23,13 +23,19 @@ export class ChatListComponent implements OnInit {
           newInfo.active = 'table-active';
           this.chatNodes.push(newInfo);
         }
-        this.userContact.sendEvent(EventType.OpenChat, info);
+        if (model.type === EventType.ChatInfo) {
+          this.userContact.sendEvent(EventType.OpenChat, info);
+        } else {
+          this.userContact.sendEvent(model.type, info);
+        }
+
       } else if (model.type === EventType.ChatMessage) {
         const newMessage = model.data;
         const res = this.chatNodes.filter(d => d.userDetail.userId === newMessage.userId || d.userDetail.userId === newMessage.toUserId);
         if (res && res.length > 0) {
           res[0].text = newMessage.text;
           res[0].time = newMessage.creationTime;
+          res[0].type = newMessage.messageType;
         } else {
           this.getUserInfoById(newMessage.userId, newMessage.text);
         }
@@ -78,6 +84,7 @@ export class ChatListComponent implements OnInit {
 
 class ChatModel {
   public text: string;
+  public type: number;
   public active = '';
   constructor(public userDetail: any, public time: Date) {
 

@@ -48,7 +48,8 @@ export enum MessageTypeEnum {
     Video,
     Refuse,
     Accept,
-    Exit
+    Exit,
+    Close
 }
 export enum ChatStautsEnum {
     Invitation,
