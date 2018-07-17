@@ -9,10 +9,11 @@ export class AgoraServiceService {
   private PeerStreamPre = 6666666;
   public localVideo: AgoraVideoNode;
   public subjectVideo = new Subject<SubjectVideo>();
-
+  private accessAllowed = false;
   public changeVideOb;
   constructor() {
     this.changeVideOb = this.subjectVideo.asObservable();
+    AgoraRTC.Logger.setLogLevel(AgoraRTC.Logger.ERROR);
   }
 
   agoraInit(userId: any, courseId: string, audio: boolean, video: boolean, is_teacher: boolean, is_peer: boolean) {
@@ -35,7 +36,13 @@ export class AgoraServiceService {
           this.subjectVideo.next(new SubjectVideo(videoNode, AgoraEnum.Connect, is_teacher, true, is_peer));
           this.client.publish(this.localStream, (err) => console.log(err));
         });
-
+        this.localStream.on('accessAllowed', function () {
+          this.accessAllowed = true;
+          console.log('accessAllowed');
+        });
+        this.localStream.on('accessDenied', function () {
+          console.log('accessDenied');
+        });
       });
     });
     this.agoraEventInit();
@@ -49,7 +56,9 @@ export class AgoraServiceService {
         console.log('Subscribe stream failed', err);
       });
     });
-
+    this.client.on('error', function (err) {
+      console.log('Got error msg:', err.reason);
+    });
     this.client.on('stream-removed', (evt) => this.streamRemove(evt));
     this.client.on('peer-leave', (evt) => this.streamRemove(evt));
     this.client.on('stream-subscribed', (evt) => {

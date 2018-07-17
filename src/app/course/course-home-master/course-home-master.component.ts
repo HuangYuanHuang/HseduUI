@@ -1,12 +1,14 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef } from '@angular/core';
 import { AgoraServiceService, AgoraVideoNode, SubjectVideo, AgoraEnum } from '../../service/agora-service.service';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 @Component({
   selector: 'app-course-home-master',
   templateUrl: './course-home-master.component.html',
   styleUrls: ['./course-home-master.component.css']
 })
 export class CourseHomeMasterComponent implements OnInit {
+  @ViewChild('content') modalContext: ElementRef;
 
   courseId;
   public localVideoNode: AgoraVideoNode;
@@ -14,7 +16,8 @@ export class CourseHomeMasterComponent implements OnInit {
   userName;
   courseName;
   isTeacher = true;
-  constructor(private agora: AgoraServiceService, private runConfig: RuntimeConfigService) {
+  constructor(private agora: AgoraServiceService,
+    private runConfig: RuntimeConfigService, private modalService: NgbModal) {
     this.courseId = runConfig.courseId;
     this.userId = runConfig.userId;
     this.userName = runConfig.userName;
@@ -34,6 +37,11 @@ export class CourseHomeMasterComponent implements OnInit {
     this.agora.subjectVideo.next(new SubjectVideo(this.localVideoNode, AgoraEnum.DisConnect, this.isTeacher, true, false));
   }
   ngOnInit() {
+    setTimeout(() => {
+      if (!this.localVideoNode) {
+        this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+      }
+    }, 5000);
   }
 
 }

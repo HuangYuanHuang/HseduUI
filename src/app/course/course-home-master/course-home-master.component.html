@@ -115,3 +115,19 @@
 
 
 </div>
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{'Error'|translate}}</h4>
+
+  </div>
+  <div class="modal-body">
+    <p>{{'Media Access NotReadableError'| translate}}</p>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-light" (click)="c('Close click')">{{ 'Close' | translate}}</button>
+
+  </div>
+</ng-template>

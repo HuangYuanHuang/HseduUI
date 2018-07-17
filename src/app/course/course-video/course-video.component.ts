@@ -49,6 +49,19 @@ export class CourseVideoComponent implements OnInit {
           res[0].playAudio();
         }
       }
+      // 委托master操作
+
+      if (subject.type === ReceiveStausEnum.VideoSelfOpera ) {
+        const res = this.videoNodes.filter(d => d.getStreamId() === subject.data);
+        if (res && res.length > 0) {
+          res[0].playVideo();
+        }
+      } else if (subject.type === ReceiveStausEnum.AudioSelfOpera) {
+        const res = this.videoNodes.filter(d => d.getStreamId() === subject.data);
+        if (res && res.length > 0) {
+          res[0].playAudio();
+        }
+      }
     });
   }
 

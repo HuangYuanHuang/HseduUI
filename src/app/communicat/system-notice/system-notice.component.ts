@@ -10,7 +10,7 @@ import { SignalrOnlineChatService } from '../../service/signalr-online-chat-serv
   styleUrls: ['./system-notice.component.less']
 })
 export class SystemNoticeComponent implements OnInit {
-
+  requestNum = 0;
   userApplyNodes = [];
   userRequestNodes = [];
   constructor(private httpClient: HttpClient, private runConfig: RuntimeConfigService,
@@ -19,15 +19,32 @@ export class SystemNoticeComponent implements OnInit {
       const model = new UserApply(node.fromUserId, node.toUserId, node.creationTime, node.status, node.id);
       const userId = model.fromUserId === runConfig.userId ? model.toUserId : model.fromUserId;
       model.userDetail = this.userContact.getUserInfoFromCache(userId);
+      console.log(model);
       if (node.userDetail == null) {
         this.userContact.getUserInfoFromHttp(userId, (d) => model.userDetail = d);
       }
       if (model.fromUserId === runConfig.userId) {
-        this.userApplyNodes.unshift(model);
-        this.userContact.userApplyNodes.push(model);
+
+        const resUserApply = this.userApplyNodes.filter(d => d.id === node.id);
+        if (resUserApply && resUserApply.length > 0) {
+          resUserApply[0].status = node.status;
+          resUserApply[0].time = node.creationTime;
+          this.userContact.initData();
+        } else {
+          this.userApplyNodes.unshift(model);
+        }
+
       } else {
-        this.userRequestNodes.unshift(model);
-        this.userContact.userRequestNodes.push(model);
+        const userRequestNodes = this.userRequestNodes.filter(d => d.id === node.id);
+        if (userRequestNodes && userRequestNodes.length > 0) {
+          userRequestNodes[0].status = node.status;
+          userRequestNodes[0].time = node.creationTime;
+          this.userContact.initData();
+        } else {
+          this.userRequestNodes.unshift(model);
+          this.requestNum++;
+          $('#badge-notice').text(this.requestNum);
+        }
       }
     });
   }
@@ -73,6 +90,13 @@ export class SystemNoticeComponent implements OnInit {
     }).subscribe(data => {
       if (data.success) {
         item.status = status;
+        this.requestNum--;
+        if (this.requestNum <= 0) {
+          $('#badge-notice').text('');
+        } else {
+          $('#badge-notice').text(this.requestNum);
+        }
+
       }
     });
   }

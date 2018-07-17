@@ -55,7 +55,9 @@ export enum ReceiveStausEnum {
     Message,
     OnlineNum,
     VideoOpera,
-    AudioOpera
+    AudioOpera,
+    VideoSelfOpera,
+    AudioSelfOpera
 }
 
 export class RealModel {

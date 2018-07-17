@@ -1,7 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { AgoraServiceService, SubjectVideo, AgoraVideoNode, AgoraEnum } from '../../service/agora-service.service';
 import { RuntimeConfigService } from '../../service/runtime-config-service';
-import { SignalrChatService, RealModel, ReceiveStausEnum } from '../../service/signalr-chat-service';
+import { SignalrChatService, ReceiveStausEnum } from '../../service/signalr-chat-service';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-course-home',
@@ -9,13 +10,16 @@ import { SignalrChatService, RealModel, ReceiveStausEnum } from '../../service/s
   styleUrls: ['./course-home.component.css']
 })
 export class CourseHomeComponent implements OnInit {
+  @ViewChild('content') modalContext: ElementRef;
+
   public localVideoNode: AgoraVideoNode;
   courseId;
   userId;
   userName;
   courseName;
   isTeacher = false;
-  constructor(private agora: AgoraServiceService, private runConfig: RuntimeConfigService, private signalr: SignalrChatService) {
+  constructor(private agora: AgoraServiceService, private runConfig: RuntimeConfigService,
+    private signalr: SignalrChatService, private modalService: NgbModal) {
     this.courseId = runConfig.courseId;
     this.userId = runConfig.userId;
     this.userName = runConfig.userName;
@@ -36,16 +40,21 @@ export class CourseHomeComponent implements OnInit {
   }
 
   playVideo(item: AgoraVideoNode) {
-    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.VideoOpera, () => {
-   //   item.playVideo();
+    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.VideoSelfOpera, () => {
+      //   item.playVideo();
     });
   }
   playAudio(item: AgoraVideoNode) {
-    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.AudioOpera, () => {
-  //    item.playAudio();
+    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.AudioSelfOpera, () => {
+      //    item.playAudio();
     });
   }
   ngOnInit() {
+    setTimeout(() => {
+      if (!this.localVideoNode) {
+        this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+      }
+    }, 5000);
   }
 
 }

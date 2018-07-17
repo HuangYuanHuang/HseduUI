@@ -47,21 +47,21 @@
           </div>
         </div>
         <div class="col-8">
-            <div class="text-muted"  style="text-align: center;margin-bottom: 20px;" >
+          <div class="text-muted" style="text-align: center;margin-bottom: 20px;">
 
-                <div style="text-align: center" class="div-button" *ngIf="localVideoNode">
-          
-                  <button type="button" class="btn btn-sm "  (click)="playVideo(localVideoNode)" [ngClass]="localVideoNode.videoBtnClass">
-                    <i class="fas fa-1x " [ngClass]="localVideoNode.videoIonClass"></i>
-                  </button>
-                  <button type="button" class="btn btn-sm " (click)="playAudio(localVideoNode)" [ngClass]="localVideoNode.audioBtnClass">
-                    <i class="fas fa-1x " [ngClass]="localVideoNode.audioIonClass"></i>
-                  </button>
-                  <!-- <button type="button" class="btn btn-sm btn-danger" (click)="streamClose()">
+            <div style="text-align: center" class="div-button" *ngIf="localVideoNode">
+
+              <button type="button" class="btn btn-sm " (click)="playVideo(localVideoNode)" [ngClass]="localVideoNode.videoBtnClass">
+                <i class="fas fa-1x " [ngClass]="localVideoNode.videoIonClass"></i>
+              </button>
+              <button type="button" class="btn btn-sm " (click)="playAudio(localVideoNode)" [ngClass]="localVideoNode.audioBtnClass">
+                <i class="fas fa-1x " [ngClass]="localVideoNode.audioIonClass"></i>
+              </button>
+              <!-- <button type="button" class="btn btn-sm btn-danger" (click)="streamClose()">
                     <i class="fas fa-ban"></i>
                   </button> -->
-                </div>
-              </div>
+            </div>
+          </div>
           <div class="video-person">
             <app-course-video></app-course-video>
           </div>
@@ -103,8 +103,25 @@
       </div>
 
     </div>
-   
+
   </div>
 
 
 </div>
+
+
+
+<ng-template #content let-c="close" let-d="dismiss">
+  <div class="modal-header">
+    <h4 class="modal-title">{{'Error'|translate}}</h4>
+
+  </div>
+  <div class="modal-body">
+    <p>{{'Media Access NotReadableError'| translate}}</p>
+  </div>
+  <div class="modal-footer">
+
+    <button type="button" class="btn btn-light" (click)="c('Close click')">{{ 'Close' | translate}}</button>
+
+  </div>
+</ng-template>
