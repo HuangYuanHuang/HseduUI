@@ -50,11 +50,11 @@ export class CourseHomeComponent implements OnInit {
     });
   }
   ngOnInit() {
-    setTimeout(() => {
-      if (!this.localVideoNode) {
-        this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
-      }
-    }, 5000);
+    // setTimeout(() => {
+    //   if (!this.localVideoNode) {
+    //     this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+    //   }
+    // }, 5000);
   }
 
 }

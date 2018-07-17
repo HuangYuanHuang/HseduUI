@@ -131,5 +131,8 @@
   "In the call": "通话中",
   "Exit": "退出",
   "Error": "错误",
-  "Media Access NotReadableError": "摄像头打开失败,请确定摄像头是否被其他应用独占"
+  "Agree": "已同意",
+  "Have applied": "已申请",
+  "Media Access NotReadableError": "摄像头打开失败,请确定摄像头是否被其他应用独占",
+  "Hang Up":"挂断"
 }

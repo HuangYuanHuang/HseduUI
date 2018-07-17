@@ -14,13 +14,13 @@
       <tbody>
         <tr *ngFor="let item of voteNodes;let i=index">
           <th scope="row">{{i+1}}</th>
-          <td style="width: 50%">{{item.title}}</td>
+          <td style="width: 40%">{{item.title}}</td>
           <td>
             <span *ngIf="item.userVoteStaus" class="badge badge-success">{{'finished'|translate}}</span>
             <span *ngIf="!item.userVoteStaus" class="badge badge-warning">{{'unfinished' | translate}}</span>
           </td>
 
-          <td>{{item.creationTime|date:'yyyy-MM-dd HH:mm:ss'}}</td>
+          <td>{{item.creationTime|date:'yyyy-MM-dd'}}</td>
           <td>
             <button *ngIf="!item.userVoteStaus" type="button" placement="top" ngbTooltip="{{'Participation in voting'|translate}}" class="btn btn-sm btn-outline-warning" (click)="voteView(item,voteViewContent)">
               <i class="fas fa-eye"></i>

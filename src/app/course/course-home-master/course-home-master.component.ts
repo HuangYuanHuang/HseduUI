@@ -37,11 +37,11 @@ export class CourseHomeMasterComponent implements OnInit {
     this.agora.subjectVideo.next(new SubjectVideo(this.localVideoNode, AgoraEnum.DisConnect, this.isTeacher, true, false));
   }
   ngOnInit() {
-    setTimeout(() => {
-      if (!this.localVideoNode) {
-        this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
-      }
-    }, 5000);
+    // setTimeout(() => {
+    //   if (!this.localVideoNode) {
+    //     this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+    //   }
+    // }, 5000);
   }
 
 }

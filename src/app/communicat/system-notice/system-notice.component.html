@@ -31,6 +31,10 @@
                   <p *ngIf="item.userDetail">{{item.userDetail.bio}}</p>
                 </td>
                 <td *ngIf="item.userDetail">{{item.userDetail.country}}</td>
+               
+                <td>
+                  {{item.time | date: 'yyyy-MM-dd HH:mm'}}
+                </td>
                 <td>
                   <p *ngIf="item.status==0">
                     {{'Have applied' |translate}}
@@ -41,9 +45,6 @@
                   <p *ngIf="item.status==2">
                     {{'Refuse' |translate}}
                   </p>
-                </td>
-                <td>
-                  {{item.time | date: 'yyyy-MM-dd HH:mm'}}
                 </td>
               </tr>
 

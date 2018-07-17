@@ -15,6 +15,7 @@ export class ChatMediaComponent implements OnInit, OnChanges {
   @Output() sendMessage = new EventEmitter<any>();
   isLoad = false;
   chatStatus = ChatStautsEnum.Invitation;
+  mediaVideo = false;
   mediaMessage = { channel: '', video: false, audio: false };
   constructor(private agora: AgoraServiceService,
     private onlineChatService: SignalrOnlineChatService,
@@ -38,14 +39,21 @@ export class ChatMediaComponent implements OnInit, OnChanges {
       switch (model.messageType) {
         case MessageTypeEnum.Audio:
           this.chatStatus = ChatStautsEnum.Confirm;
+          this.mediaVideo = false;
           this.mediaMessage = { channel: model.message, audio: true, video: false };
           break;
         case MessageTypeEnum.Video:
           this.chatStatus = ChatStautsEnum.Confirm;
+          this.mediaVideo = true;
           this.mediaMessage = { channel: model.message, audio: true, video: true };
           break;
         case MessageTypeEnum.Accept:
           this.chatStatus = ChatStautsEnum.Accept;
+          setTimeout(() => {
+            const backgroundUrl = `url('${this.mediaModel.user.imageUrlFull}')`;
+            $('.media-main').css('background-image', backgroundUrl);
+          }, 100);
+
           this.localVideoNode.play();
           break;
         case MessageTypeEnum.Refuse:
@@ -75,6 +83,10 @@ export class ChatMediaComponent implements OnInit, OnChanges {
       } else if (!subject.is_local && subject.aogra === AgoraEnum.Connect && subject.is_peer) {
         this.remoteVideoNode = subject.videNode;
         this.chatStatus = ChatStautsEnum.Accept;
+        setTimeout(() => {
+          const backgroundUrl = `url('${this.mediaModel.user.imageUrlFull}')`;
+          $('.media-main').css('background-image', backgroundUrl);
+        }, 100);
         this.remoteVideoNode.play();
       }
     });
@@ -82,12 +94,18 @@ export class ChatMediaComponent implements OnInit, OnChanges {
   linkInfo(type: string) {
     const timeSpan = new Date().getHours() + new Date().getMilliseconds() + new Date().getSeconds();
     const channel = `Peer_${this.runConfig.userId}-Peer_${this.mediaModel.user.userId}-${timeSpan}`;
+    setTimeout(() => {
+      const backgroundUrl = `url('${this.mediaModel.user.imageUrlFull}')`;
+      $('.media-main').css('background-image', backgroundUrl);
+    }, 100);
     if (type === 'audio') {
       this.chatStatus = ChatStautsEnum.Invitation;
+      console.log(this.mediaModel.user.imageUrlFull);
       this.sendMessage.emit({
         channel: channel,
         type: MessageTypeEnum.Audio,
         callBack: () => {
+          this.mediaVideo = false;
           this.agora.agoraInit(this.runConfig.userId, channel, true, false, false, true);
           $('.opera-btn').hide();
         }
@@ -98,6 +116,7 @@ export class ChatMediaComponent implements OnInit, OnChanges {
         channel: channel,
         type: MessageTypeEnum.Video,
         callBack: () => {
+          this.mediaVideo = true;
           this.agora.agoraInit(this.runConfig.userId, channel, true, true, false, true);
           $('.opera-btn').hide();
         }

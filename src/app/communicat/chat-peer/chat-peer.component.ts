@@ -155,13 +155,19 @@ export class ChatPeerComponent implements OnInit {
     this.mediaModel.user = this.userContact.getUserInfoFromCache(model.fromUserId);
     this.mediaModel.type = type;
     this.mediaModel.channel = model.message;
+    $('#pills-chat-tab').trigger('click');
     if (this.mediaModel.user === null) {
       this.userContact.getUserInfoFromHttp(model.fromUserId, (d) => {
         this.mediaModel.user = d;
-        this.modalResult = this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+        setTimeout(() => {
+          this.modalResult = this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+        }, 1000);
       });
     } else {
-      this.modalResult = this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+      setTimeout(() => {
+        this.modalResult = this.modalService.open(this.modalContext, { backdrop: 'static', centered: true });
+      }, 1000);
+
     }
 
   }
@@ -179,6 +185,7 @@ export class ChatPeerComponent implements OnInit {
           this.mediaModel.audio = true;
           this.mediaModel.video = true;
           this.initMediaMessage('Video invitations', model, 'video');
+
           break;
         case MessageTypeEnum.Close:
           if (this.modalResult) {

@@ -7,14 +7,14 @@
       <div class="footer" style="top:600px">
         <p>{{'Wait for the other party to accept the invitation'| translate}}</p>
         <div class="footer-button">
-          <button type="button" class="btn btn-danger" (click)="closeStream()">{{'Close'|translate}} </button>
+          <button type="button" class="btn btn-danger" (click)="closeStream()">{{'Hang Up'|translate}} </button>
 
         </div>
       </div>
     </div>
 
   </div>
-  <div class="media-info" *ngIf="chatStatus==2">
+  <div class="media-info" *ngIf="chatStatus==2&&mediaVideo">
     <div class="media-main" id="media-call">
       <div class="video-play" *ngIf="remoteVideoNode" id="{{remoteVideoNode.getStreamId()}}">
       </div>
@@ -32,10 +32,33 @@
           <p>{{'In the call'| translate}}</p>
           <div class="footer-button">
             <button type="button" class="btn btn-danger" (click)="closeInfo('exit')">
-              {{'Exit'|translate}}
+              {{'Hang Up'|translate}}
             </button>
+          </div>
+      </div>
+    </div>
 
+  </div>
+  <div class="media-info" *ngIf="chatStatus==2&&!mediaVideo">
+    <div class="media-main">
+      <div class="video-play" *ngIf="remoteVideoNode" id="{{remoteVideoNode.getStreamId()}}">
+      </div>
+      <div class="video-play-top">
+        <div style="width: 70px;height: 100px;margin-left: 20px" *ngIf="localVideoNode" id="{{localVideoNode.getStreamId()}}">
+        </div>
+      </div>
+      <div class="footer">
+        <p>
+          <img [src]="mediaModel.user.imageUrlMedium" alt="">
 
+          <p>
+            <strong>{{mediaModel.user.userName}}</strong>
+          </p>
+          <p>{{'In the call'| translate}}</p>
+          <div class="footer-button">
+            <button type="button" class="btn btn-danger" (click)="closeInfo('exit')">
+              {{'Hang Up'|translate}}
+            </button>
           </div>
       </div>
     </div>
