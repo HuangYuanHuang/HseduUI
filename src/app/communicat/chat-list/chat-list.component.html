@@ -9,7 +9,7 @@
         <td>
           <div>
             <h5>
-              <strong>{{item.userDetail.userName}}</strong>
+              <strong>{{item.userDetail.userName}}</strong><span *ngIf="item.num>0" style="margin-left: 10px" id="badge-notice" class="badge badge-success">{{item.num}}</span>
             </h5>
             <p *ngIf="item.type==1" class="text">{{item.text}}</p>
             <p *ngIf="item.type>1" class="text" style="color: red"><i [ngClass]="item.text"></i></p>

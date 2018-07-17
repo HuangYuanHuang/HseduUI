@@ -6,7 +6,7 @@ import { CourseConfig } from '../../../shard/CourseConfig';
 import { UserContactService, UserModel, EventModel, EventType } from '../../service/user-contact-service';
 import { NgbModal, ModalDismissReasons } from '@ng-bootstrap/ng-bootstrap';
 import { AgoraServiceService, SubjectVideo, AgoraVideoNode, AgoraEnum } from '../../service/agora-service.service';
-
+import { TranslateService } from '@ngx-translate/core';
 @Component({
   selector: 'app-chat-peer',
   templateUrl: './chat-peer.component.html',
@@ -17,10 +17,11 @@ export class ChatPeerComponent implements OnInit {
   userMessageMap = new Map<number, MessageModel>();
   currentChatModel = { user: null, nodes: [], text: '' };
   mediaModel = { user: null, type: '', channel: '', audio: false, video: false };
+  currentOpera = { type: 0, fromUserId: 0, toUserId: 0 };
   modalResult;
   @ViewChild('content') modalContext: ElementRef;
 
-  constructor(private runConfig: RuntimeConfigService,
+  constructor(private runConfig: RuntimeConfigService, private translate: TranslateService,
     private onlineChatService: SignalrOnlineChatService, private agora: AgoraServiceService,
     private http: HttpClient, private userContact: UserContactService, private modalService: NgbModal) {
     this.userContact.obEventNodes.subscribe(data => {
@@ -190,8 +191,23 @@ export class ChatPeerComponent implements OnInit {
         case MessageTypeEnum.Close:
           if (this.modalResult) {
             this.modalResult.close();
+            const tipMessage = this.translate.instant('Cancel To call');
+            const chatClose = new ChatNode(tipMessage, model.fromUserId, model.toUserId,
+              MessageTypeEnum.Text, model.creationTime);
+            const userMapClose = this.userMessageMap.get(node.fromUserId);
+            userMapClose.nodes.push(chatClose);
+            setTimeout(() => {
+              $('#m-message').scrollTop(50000);
+            }, 100);
           }
-
+          break;
+        case MessageTypeEnum.Refuse:
+          if (!this.modalResult) {
+            this.showMediaOperaMessage('Refused to call', model, MessageTypeEnum.Refuse);
+          }
+          break;
+        case MessageTypeEnum.Exit:
+          this.showMediaOperaMessage('Call End', model, MessageTypeEnum.Exit);
           break;
         case MessageTypeEnum.Text:
           const chat = new ChatNode(model.message, model.fromUserId, model.toUserId,
@@ -214,6 +230,18 @@ export class ChatPeerComponent implements OnInit {
       }
     });
   }
+  showMediaOperaMessage(text: string, model: any, type: MessageTypeEnum) {
+    this.currentOpera.type = 0;
+    const chat = new ChatNode(this.translate.instant(text), model.fromUserId, model.toUserId,
+      MessageTypeEnum.Text, model.creationTime);
+    const userMap = this.userMessageMap.get(model.fromUserId);
+    if (userMap) {
+      userMap.nodes.push(chat);
+      setTimeout(() => {
+        $('#m-message').scrollTop(50000);
+      }, 100);
+    }
+  }
   linkInfo(type: string) {
     this.mediaModel = { user: this.currentChatModel.user, type: type, channel: '', video: true, audio: true };
     $('#chat-main').width($('.chat-peer').width() * 0.7);
@@ -225,6 +253,11 @@ export class ChatPeerComponent implements OnInit {
     this.userContact.sendEvent(EventType.MessageHis, this.currentChatModel.user);
   }
   sendMediaMessage(model: any) {
+    // if (model.type === MessageTypeEnum.Exit) {
+    //   this.showMediaOperaMessage('Call End', model, MessageTypeEnum.Exit);
+    // } else {
+
+    // }
     this.postMesssage(model.channel, model.type, model.callBack);
   }
   join() {
@@ -254,9 +287,14 @@ export class ChatPeerComponent implements OnInit {
     this.sendMediaMessage({
       channel: 'Refuse',
       type: MessageTypeEnum.Refuse,
+      data: { fromUserId: this.runConfig.userId, toUserId: this.currentChatModel.user.userId },
       callBack: () => {
+        this.currentOpera = { type: MessageTypeEnum.Refuse, fromUserId: this.runConfig.userId, toUserId: this.currentChatModel.user.userId };
         $('#chat-main').removeAttr('style');
         $('.opera-btn').show();
+        if (this.modalResult) {
+          this.modalResult.close();
+        }
       }
     });
   }

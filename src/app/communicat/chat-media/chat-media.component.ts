@@ -9,6 +9,8 @@ import { RuntimeConfigService } from '../../service/runtime-config-service';
   styleUrls: ['./chat-media.component.less']
 })
 export class ChatMediaComponent implements OnInit, OnChanges {
+  private static isInitSubscribe = false;
+
   @Input() mediaModel;
   private localVideoNode: AgoraVideoNode;
   private remoteVideoNode: AgoraVideoNode;
@@ -21,7 +23,11 @@ export class ChatMediaComponent implements OnInit, OnChanges {
     private onlineChatService: SignalrOnlineChatService,
     private runConfig: RuntimeConfigService) {
     this.initAgora();
-    this.initGetChatMessage();
+    if (!ChatMediaComponent.isInitSubscribe) {
+      this.initGetChatMessage();
+      ChatMediaComponent.isInitSubscribe = true;
+    }
+
   }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isLoad) {
@@ -57,10 +63,16 @@ export class ChatMediaComponent implements OnInit, OnChanges {
           this.localVideoNode.play();
           break;
         case MessageTypeEnum.Refuse:
-          this.closeStream();
+          this.closeStream('Refuse', MessageTypeEnum.Refuse, model);
           break;
         case MessageTypeEnum.Exit:
-          this.closeStream();
+          if (this.localVideoNode) {
+            this.localVideoNode.stop();
+          }
+          $('#chat-main').width($('.chat-peer').width());
+          $('#media-main').width($('.chat-peer').width() * 0.3);
+          $('#media-main').hide();
+          $('.opera-btn').show();
           break;
       }
     });
@@ -123,10 +135,10 @@ export class ChatMediaComponent implements OnInit, OnChanges {
       });
     }
   }
-  closeStream() {
+  closeStream(channel: string, type: MessageTypeEnum, data: any) {
     if (this.localVideoNode) {
       this.sendMessage.emit({
-        channel: 'Close', type: MessageTypeEnum.Close, callBack: () => {
+        channel: channel, type: type, data: data, callBack: () => {
           this.localVideoNode.stop();
         }
       });
@@ -135,29 +147,5 @@ export class ChatMediaComponent implements OnInit, OnChanges {
     $('#media-main').width($('.chat-peer').width() * 0.3);
     $('#media-main').hide();
     $('.opera-btn').show();
-  }
-
-  closeInfo(opera: string) {
-    if (opera === 'refuse') {
-      this.sendMessage.emit({
-        channel: 'Refuse',
-        type: MessageTypeEnum.Refuse,
-        callBack: () => {
-          $('#chat-main').removeAttr('style');
-          this.closeStream();
-        }
-      });
-
-    } else if (opera === 'exit') {
-      this.sendMessage.emit({
-        channel: 'Exit',
-        type: MessageTypeEnum.Exit,
-        callBack: () => {
-          $('#chat-main').removeAttr('style');
-          this.closeStream();
-        }
-      });
-    }
-
   }
 }

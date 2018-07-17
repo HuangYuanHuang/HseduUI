@@ -88,7 +88,8 @@ export enum EventType {
     ChatVideo,
     OpenVideo,
     ChatAudio,
-    OpenAudio
+    OpenAudio,
+    LastMessage
 }
 export class EventModel {
     constructor(public type: EventType, public data: any) {

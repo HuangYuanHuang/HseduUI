@@ -7,7 +7,7 @@
       <div class="footer" style="top:600px">
         <p>{{'Wait for the other party to accept the invitation'| translate}}</p>
         <div class="footer-button">
-          <button type="button" class="btn btn-danger" (click)="closeStream()">{{'Hang Up'|translate}} </button>
+          <button type="button" class="btn btn-danger" (click)="closeStream('Close',7)">{{'Hang Up'|translate}} </button>
 
         </div>
       </div>
@@ -31,7 +31,7 @@
           </p>
           <p>{{'In the call'| translate}}</p>
           <div class="footer-button">
-            <button type="button" class="btn btn-danger" (click)="closeInfo('exit')">
+            <button type="button" class="btn btn-danger" (click)="closeStream('Exit',6)">
               {{'Hang Up'|translate}}
             </button>
           </div>
@@ -56,7 +56,7 @@
           </p>
           <p>{{'In the call'| translate}}</p>
           <div class="footer-button">
-            <button type="button" class="btn btn-danger" (click)="closeInfo('exit')">
+            <button type="button" class="btn btn-danger" (click)="closeStream('Exit',6)">
               {{'Hang Up'|translate}}
             </button>
           </div>

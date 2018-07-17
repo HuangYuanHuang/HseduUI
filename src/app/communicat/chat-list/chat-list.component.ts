@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserContactService, EventModel, EventType } from '../../service/user-contact-service';
+import { MessageTypeEnum } from '../../service/signalr-online-chat-service';
 
 @Component({
   selector: 'app-chat-list',
@@ -31,24 +32,28 @@ export class ChatListComponent implements OnInit {
           this.userContact.sendEvent(EventType.OpenAudio, info);
         }
 
-      } else if (model.type === EventType.ChatMessage) {
+      } else if (model.type === EventType.ChatMessage || model.type === EventType.LastMessage) {
         const newMessage = model.data;
         const res = this.chatNodes.filter(d => d.userDetail.userId === newMessage.userId || d.userDetail.userId === newMessage.toUserId);
         if (res && res.length > 0) {
           setTimeout(() => {
+            console.log(res[0]);
+            if (model.type === EventType.ChatMessage && res[0].active !== 'table-active' && this.chatNodes.length > 1) {
+              res[0].num++;
+            }
             res[0].text = newMessage.text;
             res[0].time = newMessage.creationTime;
             res[0].type = newMessage.messageType;
           }, 10);
 
         } else {
-          this.getUserInfoById(newMessage.userId, newMessage.text);
+          this.getUserInfoById(newMessage.userId, newMessage.text, model.data);
         }
       }
     });
   }
 
-  getUserInfoById(id: any, text: string) {
+  getUserInfoById(id: any, text: string, data: any) {
     const res = this.chatNodes.filter(d => d.userDetail.userId === id);
     if (res && res.length > 0) {
       res[0].time = new Date();
@@ -56,10 +61,16 @@ export class ChatListComponent implements OnInit {
       const userModel = this.userContact.getUserInfoFromCache(id);
       const newInfo = new ChatModel(userModel, new Date());
       this.chatNodes.push(newInfo);
-
-      if (this.chatNodes.length === 1) {
-        newInfo.time = new Date();
+      newInfo.time = new Date();
+      if (data.messageType === MessageTypeEnum.Text) {
         newInfo.text = text;
+
+        newInfo.type = EventType.ChatInfo;
+      }
+      if (this.chatNodes.length > 1) {
+        newInfo.num++;
+      }
+      if (this.chatNodes.length === 1) {
         this.userContact.sendEvent(EventType.OpenChat, newInfo.userDetail);
       }
     }
@@ -77,6 +88,7 @@ export class ChatListComponent implements OnInit {
     this.chatNodes.forEach(d => d.active = '');
     item.active = 'table-active';
     this.userContact.sendEvent(EventType.OpenChat, item.userDetail);
+    item.num = 0;
   }
   removeUser(item: any, index: number) {
     this.userContact.sendEvent(EventType.RemoveUser, item);
@@ -91,6 +103,7 @@ class ChatModel {
   public text: string;
   public type: number;
   public active = '';
+  public num = 0;
   constructor(public userDetail: any, public time: Date) {
 
   }

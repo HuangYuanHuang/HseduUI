@@ -134,5 +134,8 @@
   "Agree": "已同意",
   "Have applied": "已申请",
   "Media Access NotReadableError": "摄像头打开失败,请确定摄像头是否被其他应用独占",
-  "Hang Up":"挂断"
+  "Hang Up":"挂断",
+  "Call End":"对方结束了通话",
+  "Refused to call":"对方拒绝通话",
+  "Cancel To call":"对方取消了通话请求"
 }
