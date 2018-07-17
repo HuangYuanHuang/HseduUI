@@ -40,12 +40,14 @@ export class CourseHomeComponent implements OnInit {
   }
 
   playVideo(item: AgoraVideoNode) {
-    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.VideoSelfOpera, () => {
+    item.playVideo();
+    this.signalr.sendMediaOpera(item.userDetail.userId, item.isPlayVideo ? ReceiveStausEnum.VideoEnableOpera : ReceiveStausEnum.VideoDisEnableOpera, () => {
       //   item.playVideo();
     });
   }
   playAudio(item: AgoraVideoNode) {
-    this.signalr.sendMediaOpera(item.userDetail.userId, ReceiveStausEnum.AudioSelfOpera, () => {
+    item.playAudio();
+    this.signalr.sendMediaOpera(item.userDetail.userId, item.isPlayAudio ? ReceiveStausEnum.AudioEnableOpera : ReceiveStausEnum.AudioDisEnableOpera, () => {
       //    item.playAudio();
     });
   }

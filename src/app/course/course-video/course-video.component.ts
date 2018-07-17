@@ -42,25 +42,43 @@ export class CourseVideoComponent implements OnInit {
         const res = this.videoNodes.filter(d => d.getStreamId() === this.runConfig.userId);
         if (res && res.length > 0) {
           res[0].playVideo();
+          this.signalr.sendMediaOpera(this.runConfig.userId,
+            res[0].isPlayVideo ? ReceiveStausEnum.VideoEnableOpera : ReceiveStausEnum.VideoDisEnableOpera, () => {
+            });
         }
       } else if (subject.type === ReceiveStausEnum.AudioOpera && subject.data === this.runConfig.userId) {
         const res = this.videoNodes.filter(d => d.getStreamId() === this.runConfig.userId);
         if (res && res.length > 0) {
           res[0].playAudio();
+          this.signalr.sendMediaOpera(this.runConfig.userId,
+            res[0].isPlayAudio ? ReceiveStausEnum.AudioEnableOpera : ReceiveStausEnum.AudioDisEnableOpera, () => {
+            });
         }
-      }
-      // 委托master操作
+      } else {
+        const res = this.videoNodes.filter(d => d.getStreamId() === subject.data);
+        console.log(subject.type);
+        console.log(res);
+        if (res && res.length > 0) {
+          switch (subject.type) {
+            case ReceiveStausEnum.VideoEnableOpera:
+              res[0].isPlayVideo = false;
+              res[0].playVideo();
+              break;
+            case ReceiveStausEnum.VideoDisEnableOpera:
+              res[0].isPlayVideo = true;
+              res[0].playVideo();
+              break;
+            case ReceiveStausEnum.AudioEnableOpera:
+              res[0].isPlayAudio = false;
+              res[0].playAudio();
+              break;
+            case ReceiveStausEnum.AudioDisEnableOpera:
+              res[0].isPlayAudio = true;
+              res[0].playAudio();
+              break;
+          }
+        }
 
-      if (subject.type === ReceiveStausEnum.VideoSelfOpera ) {
-        const res = this.videoNodes.filter(d => d.getStreamId() === subject.data);
-        if (res && res.length > 0) {
-          res[0].playVideo();
-        }
-      } else if (subject.type === ReceiveStausEnum.AudioSelfOpera) {
-        const res = this.videoNodes.filter(d => d.getStreamId() === subject.data);
-        if (res && res.length > 0) {
-          res[0].playAudio();
-        }
       }
     });
   }
