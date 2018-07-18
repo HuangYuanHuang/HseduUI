@@ -137,5 +137,7 @@
   "Hang Up":"挂断",
   "Call End":"对方结束了通话",
   "Refused to call":"对方拒绝通话",
-  "Cancel To call":"对方取消了通话请求"
+  "Cancel To call":"对方取消了通话请求",
+  "New Chat":"发起聊天",
+  "Add Contacts":"添加联系人"
 }

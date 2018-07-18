@@ -6,7 +6,8 @@ import { RuntimeConfigService } from './runtime-config-service';
 export class SignalrOnlineChatService {
 
     private subjectReal = new Subject<OnlineMessageNode>();
-
+    public currentUserOperaGUID;
+    public isVideoChat = false;
     private subjectOnline = new Subject<any>();
     private subjectNotice = new Subject<any>();
     public obMessageNodes;
@@ -39,6 +40,18 @@ export class SignalrOnlineChatService {
                 this.subjectNotice.next(node);
             });
         });
+    }
+    public GetGUID() {
+        let guid = '';
+        for (let i = 1; i <= 32; i++) {
+            const n = Math.floor(Math.random() * 16.0).toString(16);
+            guid += n;
+            if ((i === 8) || (i === 12) || (i === 16) || (i === 20)) {
+                guid += '-';
+            }
+        }
+        this.currentUserOperaGUID = guid;
+        return guid;
     }
 }
 export enum MessageTypeEnum {

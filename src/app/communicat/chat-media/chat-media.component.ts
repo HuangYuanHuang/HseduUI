@@ -9,8 +9,6 @@ import { RuntimeConfigService } from '../../service/runtime-config-service';
   styleUrls: ['./chat-media.component.less']
 })
 export class ChatMediaComponent implements OnInit, OnChanges {
-  private static isInitSubscribe = false;
-
   @Input() mediaModel;
   private localVideoNode: AgoraVideoNode;
   private remoteVideoNode: AgoraVideoNode;
@@ -23,11 +21,7 @@ export class ChatMediaComponent implements OnInit, OnChanges {
     private onlineChatService: SignalrOnlineChatService,
     private runConfig: RuntimeConfigService) {
     this.initAgora();
-    if (!ChatMediaComponent.isInitSubscribe) {
-      this.initGetChatMessage();
-      ChatMediaComponent.isInitSubscribe = true;
-    }
-
+    this.initGetChatMessage();
   }
   ngOnChanges(changes: SimpleChanges) {
     if (!this.isLoad) {
@@ -55,24 +49,27 @@ export class ChatMediaComponent implements OnInit, OnChanges {
           break;
         case MessageTypeEnum.Accept:
           this.chatStatus = ChatStautsEnum.Accept;
+          this.mediaVideo = this.onlineChatService.isVideoChat;
           setTimeout(() => {
             const backgroundUrl = `url('${this.mediaModel.user.imageUrlFull}')`;
             $('.media-main').css('background-image', backgroundUrl);
           }, 100);
+          if (this.localVideoNode) {
+            this.localVideoNode.play();
+          }
 
-          this.localVideoNode.play();
           break;
         case MessageTypeEnum.Refuse:
-          this.closeStream('Refuse', MessageTypeEnum.Refuse, model);
-          break;
         case MessageTypeEnum.Exit:
-          if (this.localVideoNode) {
-            this.localVideoNode.stop();
+          if (this.onlineChatService.currentUserOperaGUID !== model.message) {
+            if (this.localVideoNode) {
+              this.localVideoNode.stop();
+            }
+            $('#chat-main').width($('.chat-peer').width());
+            $('#media-main').width($('.chat-peer').width() * 0.3);
+            $('#media-main').hide();
+            $('.opera-btn').show();
           }
-          $('#chat-main').width($('.chat-peer').width());
-          $('#media-main').width($('.chat-peer').width() * 0.3);
-          $('#media-main').hide();
-          $('.opera-btn').show();
           break;
       }
     });
@@ -85,6 +82,7 @@ export class ChatMediaComponent implements OnInit, OnChanges {
     $('.sidebar-right').on('mouseout', 'div[id="media-call"]', function () {
       $('#footer-opera', this).hide();
     });
+
   }
   initAgora() {
     this.agora.changeVideOb.subscribe(node => {
@@ -94,6 +92,7 @@ export class ChatMediaComponent implements OnInit, OnChanges {
         subject.videNode.play();
       } else if (!subject.is_local && subject.aogra === AgoraEnum.Connect && subject.is_peer) {
         this.remoteVideoNode = subject.videNode;
+        this.mediaVideo = this.onlineChatService.isVideoChat;
         this.chatStatus = ChatStautsEnum.Accept;
         setTimeout(() => {
           const backgroundUrl = `url('${this.mediaModel.user.imageUrlFull}')`;
@@ -136,13 +135,16 @@ export class ChatMediaComponent implements OnInit, OnChanges {
     }
   }
   closeStream(channel: string, type: MessageTypeEnum, data: any) {
-    if (this.localVideoNode) {
-      this.sendMessage.emit({
-        channel: channel, type: type, data: data, callBack: () => {
-          this.localVideoNode.stop();
-        }
-      });
-    }
+    setTimeout(() => {
+      if (this.localVideoNode) {
+        this.localVideoNode.stop();
+      }
+    }, 2000);
+    this.sendMessage.emit({
+      channel: this.onlineChatService.GetGUID(), type: type, data: data, callBack: () => {
+
+      }
+    });
     $('#chat-main').width($('.chat-peer').width());
     $('#media-main').width($('.chat-peer').width() * 0.3);
     $('#media-main').hide();

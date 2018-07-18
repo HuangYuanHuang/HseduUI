@@ -11,10 +11,10 @@
           {{item.userName}}
         </td>
         <td>
-          <button type="button" class="btn btn-sm btn-outline-primary" *ngIf="item.status==1" (click)="chat(item)">
+          <button type="button" class="btn btn-sm btn-outline-primary"  placement="top" ngbTooltip="{{'New Chat'|translate}}" *ngIf="item.status==1" (click)="chat(item)">
             <i class="fab fa-rocketchat"></i>
           </button>
-          <button *ngIf="item.status==-1" class="btn btn-outline-primary my-2 my-sm-0" (click)="addFriend(item)">
+          <button *ngIf="item.status==-1" class="btn btn-sm btn-outline-primary my-2 my-sm-0"  placement="top" ngbTooltip="{{'Add Contacts'|translate}}" (click)="addFriend(item)">
             <i class="fas fa-plus"></i>
           </button>
           <p *ngIf="item.status==0">

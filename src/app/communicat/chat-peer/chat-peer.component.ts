@@ -17,7 +17,6 @@ export class ChatPeerComponent implements OnInit {
   userMessageMap = new Map<number, MessageModel>();
   currentChatModel = { user: null, nodes: [], text: '' };
   mediaModel = { user: null, type: '', channel: '', audio: false, video: false };
-  currentOpera = { type: 0, fromUserId: 0, toUserId: 0 };
   modalResult;
   @ViewChild('content') modalContext: ElementRef;
 
@@ -175,39 +174,41 @@ export class ChatPeerComponent implements OnInit {
   initGetChatMessage() {
     this.onlineChatService.obMessageNodes.subscribe(node => {
       const model = node as OnlineMessageNode;
-
+      console.log(model);
       switch (model.messageType) {
         case MessageTypeEnum.Audio:
           this.mediaModel.audio = true;
           this.mediaModel.video = false;
+          this.onlineChatService.isVideoChat = false;
           this.initMediaMessage('Audio invitations', model, 'audio');
           break;
         case MessageTypeEnum.Video:
           this.mediaModel.audio = true;
           this.mediaModel.video = true;
+          this.onlineChatService.isVideoChat = true;
           this.initMediaMessage('Video invitations', model, 'video');
 
           break;
         case MessageTypeEnum.Close:
-          if (this.modalResult) {
-            this.modalResult.close();
-            const tipMessage = this.translate.instant('Cancel To call');
-            const chatClose = new ChatNode(tipMessage, model.fromUserId, model.toUserId,
-              MessageTypeEnum.Text, model.creationTime);
-            const userMapClose = this.userMessageMap.get(node.fromUserId);
-            userMapClose.nodes.push(chatClose);
+          if (this.onlineChatService.currentUserOperaGUID !== model.message) {
+            this.showMediaOperaMessage('Cancel To call', model, MessageTypeEnum.Refuse);
             setTimeout(() => {
               $('#m-message').scrollTop(50000);
             }, 100);
+            if (this.modalResult) {
+              this.modalResult.close();
+            }
           }
           break;
         case MessageTypeEnum.Refuse:
-          if (!this.modalResult) {
+          if (this.onlineChatService.currentUserOperaGUID !== model.message) {
             this.showMediaOperaMessage('Refused to call', model, MessageTypeEnum.Refuse);
           }
           break;
         case MessageTypeEnum.Exit:
-          this.showMediaOperaMessage('Call End', model, MessageTypeEnum.Exit);
+          if (this.onlineChatService.currentUserOperaGUID !== model.message) {
+            this.showMediaOperaMessage('Call End', model, MessageTypeEnum.Refuse);
+          }
           break;
         case MessageTypeEnum.Text:
           const chat = new ChatNode(model.message, model.fromUserId, model.toUserId,
@@ -231,7 +232,6 @@ export class ChatPeerComponent implements OnInit {
     });
   }
   showMediaOperaMessage(text: string, model: any, type: MessageTypeEnum) {
-    this.currentOpera.type = 0;
     const chat = new ChatNode(this.translate.instant(text), model.fromUserId, model.toUserId,
       MessageTypeEnum.Text, model.creationTime);
     const userMap = this.userMessageMap.get(model.fromUserId);
@@ -243,7 +243,8 @@ export class ChatPeerComponent implements OnInit {
     }
   }
   linkInfo(type: string) {
-    this.mediaModel = { user: this.currentChatModel.user, type: type, channel: '', video: true, audio: true };
+    this.onlineChatService.isVideoChat = type === 'video';
+    this.mediaModel = { user: this.currentChatModel.user, type: type, channel: '', video: type === 'video' ? true : false, audio: true };
     $('#chat-main').width($('.chat-peer').width() * 0.7);
     $('#media-main').width($('.chat-peer').width() * 0.3);
     $('#media-main').show();
@@ -253,14 +254,12 @@ export class ChatPeerComponent implements OnInit {
     this.userContact.sendEvent(EventType.MessageHis, this.currentChatModel.user);
   }
   sendMediaMessage(model: any) {
-    // if (model.type === MessageTypeEnum.Exit) {
-    //   this.showMediaOperaMessage('Call End', model, MessageTypeEnum.Exit);
-    // } else {
-
-    // }
     this.postMesssage(model.channel, model.type, model.callBack);
   }
   join() {
+    if (this.modalResult) {
+      this.modalResult.close();
+    }
     this.sendMediaMessage({
       channel: 'Accept',
       type: MessageTypeEnum.Accept,
@@ -276,25 +275,25 @@ export class ChatPeerComponent implements OnInit {
         this.currentChatModel.nodes.push(chat);
         this.userContact.sendEvent(EventType.ChatMessage, chat);
         $('.opera-btn').hide();
-        this.modalResult.close();
         $('#chat-main').width($('.chat-peer').width() * 0.7);
         $('#media-main').width($('.chat-peer').width() * 0.3);
         $('#media-main').show();
+        setTimeout(() => {
+          const backgroundUrl = `url('${this.mediaModel.user.imageUrlFull}')`;
+          $('.media-main').css('background-image', backgroundUrl);
+        }, 100);
       }
     });
   }
   refuse() {
+    if (this.modalResult) {
+      this.modalResult.close();
+    }
+
     this.sendMediaMessage({
-      channel: 'Refuse',
+      channel: this.onlineChatService.GetGUID(),
       type: MessageTypeEnum.Refuse,
-      data: { fromUserId: this.runConfig.userId, toUserId: this.currentChatModel.user.userId },
       callBack: () => {
-        this.currentOpera = { type: MessageTypeEnum.Refuse, fromUserId: this.runConfig.userId, toUserId: this.currentChatModel.user.userId };
-        $('#chat-main').removeAttr('style');
-        $('.opera-btn').show();
-        if (this.modalResult) {
-          this.modalResult.close();
-        }
       }
     });
   }
