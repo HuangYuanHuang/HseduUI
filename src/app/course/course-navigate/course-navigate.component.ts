@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router'; // 导入router服务
-import { SignalrChatService, RealModel, ReceiveStausEnum } from '../../service/signalr-chat-service';
+import { HttpClient } from '@angular/common/http';
+import { CourseConfig } from '../../../shard/CourseConfig';
+import { RuntimeConfigService } from '../../service/runtime-config-service';
 
 @Component({
   selector: 'app-course-navigate',
@@ -10,43 +12,23 @@ import { SignalrChatService, RealModel, ReceiveStausEnum } from '../../service/s
 export class CourseNavigateComponent implements OnInit {
   teacherNum = 0;
   isFirst = true;
-  constructor(private router: Router, private signalr: SignalrChatService) {
-    this.signalr.obRealNodes.subscribe(node => {
-      if (!this.isFirst) {
-        return;
-      }
-      const subject = node as RealModel;
-      if (subject.type === ReceiveStausEnum.OnlineNum) {
-        this.teacherNum = 0;
-        subject.data.forEach(d => {
-          if (d.teacher) {
-            this.teacherNum++;
-          }
+  constructor(private router: Router, private http: HttpClient,
+    private runConfig: RuntimeConfigService) {
+  }
 
-        });
-        const parms = window.location.search;
-        if (this.teacherNum <= 1) {
-
-          this.router.navigateByUrl('/course-master' + parms).then(f => {
-            this.isFirst = false;
-            setTimeout(() => {
-              this.signalr.subjectReal.next(new RealModel(ReceiveStausEnum.OnlineNum, node.data));
-            }, 100);
-          });
+  ngOnInit() {
+    const apiPath = '/api/services/app/CourseLiveConfig/GetCourseLiveConfig?courseId=';
+    const parms = window.location.search;
+    this.http.get<any>(`${CourseConfig.CourseRootUrl}${apiPath}${encodeURIComponent(this.runConfig.courseId)}`).subscribe(data => {
+      if (data.success) {
+        if (data.result.masterId === this.runConfig.userId) {
+          this.router.navigateByUrl('/course-master' + parms);
         } else {
-          this.router.navigateByUrl('/course' + parms).then(f => {
-            this.isFirst = false;
-            setTimeout(() => {
-              this.signalr.subjectReal.next(new RealModel(ReceiveStausEnum.OnlineNum, node.data));
-            }, 100);
-          });
+          this.router.navigateByUrl('/course' + parms);
         }
       }
 
     });
-  }
-
-  ngOnInit() {
   }
 
 }
