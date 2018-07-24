@@ -72,6 +72,7 @@ a:link {
   vertical-align: middle;
   width: 50px;
 }
+
 .mooc-box {
   position: relative;
   padding: 0 15px;
@@ -121,4 +122,12 @@ a:link {
   margin: 0 auto;
   vertical-align: middle;
   border-radius: 4px;
+}
+
+.carousel-indicators .active {
+  background-color: blue !important;
+}
+
+.carousel-indicators li {
+  background-color: #0692E1 !important;
 }
