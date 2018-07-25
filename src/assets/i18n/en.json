@@ -28,7 +28,7 @@
   "Customization": "Artificial Intelligence",
   "Learn more": "Learn more",
   "Live Lecture": "Live Lecture",
-  "E-ducation Online Learning and Training Platform": "E-ducation Online Learning and Training Platform",
+  "E-ducation Online Learning and Training Platform": "UNESCO ASPNET Online Learning and Training Platform",
   "All EdX Features": "Connects more than 11,000 member schools across 181 countries!",
   "Top Universities Worldwide Are Using EdX Now": "UNESCO ASPNET IS USING THE PLATFORM",
   "More Features": "More Features",
@@ -77,5 +77,12 @@
   "using the same technical framework as Harvard and MIT":"Let the students embrace the world, let the world be part of school life!",
   "Call End":"Call End",
   "Refused to call":"Call declined by user",
-  "Cancel To call":"Call cancelled by caller"
+  "Cancel To call":"Call cancelled by caller",
+  "Online Learning and Training Platform":"Online Learning and Training Platform",
+  "Telephone consultation":"Telephone consultation",
+  "Phone":"Phone",
+  "Monday to Friday":"Monday to Friday",
+  "Email consultation":"Email consultation",
+  "Products Purchase":"Products Purchase",
+  "Technical Support":"Technical Support"
 }

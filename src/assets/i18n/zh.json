@@ -70,7 +70,7 @@
   "Access Allocation": "分级权限",
   "Customization": "人工智能",
   "Learn more": "了解更多",
-  "E-ducation Online Learning and Training Platform": "E-ducation在线学习培训平台",
+  "E-ducation Online Learning and Training Platform": "华师教育在线平台",
   "Easy Efficient Beyond Expectations": "轻松·高效·超越期待",
   "Log in": "进入平台",
   "Free Trial": "免费体验",
@@ -139,5 +139,12 @@
   "Refused to call":"对方拒绝通话",
   "Cancel To call":"对方取消了通话请求",
   "New Chat":"发起聊天",
-  "Add Contacts":"添加联系人"
+  "Add Contacts":"添加联系人",
+  "Online Learning and Training Platform":"在线学习培训平台",
+  "Telephone consultation":"电话咨询",
+  "Phone":"电话",
+  "Monday to Friday":"周一至周五",
+  "Email consultation":"邮箱咨询",
+  "Products Purchase":"产品购买",
+  "Technical Support":"技术支持"
 }
