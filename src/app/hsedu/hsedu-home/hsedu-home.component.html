@@ -67,17 +67,53 @@
     <h2 style="margin-top: 20px;">{{'Easy Efficient Beyond Expectations'|translate}}</h2> -->
 
   </div>
-<div class="container" style="margin-top: 20px">
-  <ngb-carousel *ngIf="images">
-    <ng-template ngbSlide *ngFor="let image of images">
-      <div style="background:#898c9d">
-          <img  style="opacity: 0.75;" [src]="image" alt="slide">
-      </div>
-   
-     
-    </ng-template>
-  </ngb-carousel>
-</div>
- 
+  <div class="container" style="margin-top: 20px">
+    <ngb-carousel *ngIf="images">
+      <ng-template ngbSlide>
+        <div>
+          <img  [src]="images[0]" alt="slide">
+        </div>
+        <div class="carousel-caption">
+
+          <p style="font-weight:bold"> I learned most of my programming skills and database management skills through self-study and the material available
+            on HUASHI EDU.
+
+          </p>
+          <p>–Jules, Database Manager</p>
+        </div>
+
+
+      </ng-template>
+      <ng-template ngbSlide>
+        <div>
+          <img  [src]="images[1]" alt="slide">
+        </div>
+        <div class="carousel-caption">
+
+          <p style="font-weight:bold"> Ben Long is the best, 90% of what I know about photography I've learned from watching his videos on HUASHI EDU.
+          </p>
+          <p>–Paul, Photography Director</p>
+        </div>
+
+
+      </ng-template>
+      <ng-template ngbSlide>
+        <div >
+          <img [src]="images[2]" alt="slide">
+        </div>
+        <div class="carousel-caption">
+
+          <p style="font-weight:bold"> I've been out of college for about two years, HUASHI EDU has changed my outlook on my career. Taking the foundational
+            courses in marketing has helped me launch my career.
+
+          </p>
+          <p>–Jenny, Associate Marketing</p>
+        </div>
+
+
+      </ng-template>
+    </ngb-carousel>
+  </div>
+
   <app-hsedu-footer></app-hsedu-footer>
 </div>

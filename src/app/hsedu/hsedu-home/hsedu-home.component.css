@@ -131,3 +131,24 @@ a:link {
 .carousel-indicators li {
   background-color: #0692E1 !important;
 }
+
+.carousel-caption {
+  position: absolute;
+  right: 5%;
+  bottom: 20px;
+  left: 48%;
+  z-index: 10;
+  top: 15%;
+  padding-top: 20px;
+  padding-bottom: 20px;
+  color: #fff;
+  text-align: center;
+}
+
+.carousel-caption p {
+  text-align: left;
+  color: black;
+  margin: 0;
+  font-size: 28px;
+  line-height: 42px;
+}
